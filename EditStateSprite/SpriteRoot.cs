@@ -7,6 +7,10 @@ namespace EditStateSprite
         public bool MultiColor { get; }
         public SpriteColorMapBase ColorMap { get; }
         public ColorName[] SpritePalette { get; }
+        public int PreviewOffsetX { get; set; }
+        public int PreviewOffsetY { get; set; }
+        public bool ExpandX { get; set; }
+        public bool ExpandY { get; set; }
 
         public SpriteRoot(bool multiColor)
         {
@@ -21,6 +25,11 @@ namespace EditStateSprite
 
             for (var i = 0; i < SpritePalette.Length; i++)
                 SpritePalette[i] = (ColorName)i;
+
+            PreviewOffsetX = 0;
+            PreviewOffsetY = 0;
+            ExpandX = false;
+            ExpandY = false;
         }
     }
 }

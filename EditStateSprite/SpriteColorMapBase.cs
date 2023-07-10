@@ -1,6 +1,4 @@
-﻿using C64Color;
-
-namespace EditStateSprite
+﻿namespace EditStateSprite
 {
     public abstract class SpriteColorMapBase
     {
