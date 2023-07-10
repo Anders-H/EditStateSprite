@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditStateSprite", "EditStateSprite\EditStateSprite.csproj", "{2C0EB9F3-3521-4BC6-9829-9160C2E06B44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C0EB9F3-3521-4BC6-9829-9160C2E06B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C0EB9F3-3521-4BC6-9829-9160C2E06B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C0EB9F3-3521-4BC6-9829-9160C2E06B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C0EB9F3-3521-4BC6-9829-9160C2E06B44}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAAD0FD6-1D4C-4FEC-A3E3-11C1ACC2F48F}
+	EndGlobalSection
+EndGlobal
