@@ -7,6 +7,10 @@ namespace EditStateSprite
         public override int Width => 24;
         public override int ColorCount => 2;
 
+        public MonochromeSpriteColorMap(SpriteRoot parent) : base(parent)
+        {
+        }
+
         public override void PaintPreview(Graphics g)
         {
             
