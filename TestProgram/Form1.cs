@@ -30,13 +30,15 @@ namespace TestProgram
                 for (var x = 0; x < sprite.ColorMap.Width; x++)
                 {
                     sprite.ColorMap.SetColor(x, y, _rnd.Next());
+                    sprite.PreviewOffsetX = posX;
+                    sprite.PreviewOffsetY = posY;
                 }
             }
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-
+            _sprites.PaintPreview(e.Graphics);
         }
     }
 }

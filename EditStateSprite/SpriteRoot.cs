@@ -11,6 +11,7 @@ namespace EditStateSprite
         public int PreviewOffsetY { get; set; }
         public bool ExpandX { get; set; }
         public bool ExpandY { get; set; }
+        public bool PreviewZoom { get; set; }
 
         public SpriteRoot(bool multiColor)
         {

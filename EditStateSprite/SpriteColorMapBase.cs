@@ -1,15 +1,18 @@
-﻿namespace EditStateSprite
+﻿using System.Drawing;
+
+namespace EditStateSprite
 {
     public abstract class SpriteColorMapBase
     {
         protected int[,] Colors;
+        protected SpriteRoot Parent { get; }
         public abstract int Width { get; }
         public int Height => 21;
         public abstract int ColorCount { get; }
-
-        protected SpriteColorMapBase()
+        
+        protected SpriteColorMapBase(SpriteRoot parent)
         {
-            // ReSharper disable once VirtualMemberCallInConstructor
+            Parent = parent;
             Colors = new int[Width, Height];
         }
 
@@ -18,5 +21,7 @@
 
         public void SetColor(int x, int y, int color) =>
             Colors[x, y] = color;
+
+        public abstract void PaintPreview(Graphics g);
     }
 }
