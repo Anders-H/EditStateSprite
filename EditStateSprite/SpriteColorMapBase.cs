@@ -22,6 +22,6 @@ namespace EditStateSprite
         public void SetColor(int x, int y, int color) =>
             Colors[x, y] = color;
 
-        public abstract void PaintPreview(Graphics g);
+        public abstract void PaintPreview(Bitmap b, Graphics g);
     }
 }

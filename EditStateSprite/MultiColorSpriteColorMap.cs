@@ -11,7 +11,7 @@ namespace EditStateSprite
         {
         }
 
-        public override void PaintPreview(Graphics g)
+        public override void PaintPreview(Bitmap b, Graphics g)
         {
             
         }

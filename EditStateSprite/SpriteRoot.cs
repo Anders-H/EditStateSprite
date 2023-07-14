@@ -18,9 +18,9 @@ namespace EditStateSprite
             MultiColor = multiColor;
 
             if (MultiColor)
-                ColorMap = new MultiColorSpriteColorMap();
+                ColorMap = new MultiColorSpriteColorMap(this);
             else
-                ColorMap = new MonochromeSpriteColorMap();
+                ColorMap = new MonochromeSpriteColorMap(this);
 
             SpritePalette = new ColorName[ColorMap.ColorCount];
 
@@ -31,6 +31,29 @@ namespace EditStateSprite
             PreviewOffsetY = 0;
             ExpandX = false;
             ExpandY = false;
+        }
+
+        public int GetPreviewPixelWidth()
+        {
+            var w = MultiColor ? 2 : 1;
+
+            if (ExpandX)
+                w *= 2;
+
+            if (PreviewZoom)
+                w *= 2;
+
+            return w;
+        }
+
+        public int GetPreviewPixelHeight()
+        {
+            var h = ExpandY ? 2 : 1;
+
+            if (PreviewZoom)
+                h *= 2;
+
+            return h;
         }
     }
 }
