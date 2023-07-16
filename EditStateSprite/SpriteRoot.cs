@@ -4,14 +4,20 @@ namespace EditStateSprite
 {
     public class SpriteRoot
     {
+        public static Palette C64Palette { get; }
         public bool MultiColor { get; }
         public SpriteColorMapBase ColorMap { get; }
-        public ColorName[] SpritePalette { get; }
+        public ColorName[] SpriteColorPalette { get; }
         public int PreviewOffsetX { get; set; }
         public int PreviewOffsetY { get; set; }
         public bool ExpandX { get; set; }
         public bool ExpandY { get; set; }
         public bool PreviewZoom { get; set; }
+
+        static SpriteRoot()
+        {
+            C64Palette = new Palette();
+        }
 
         public SpriteRoot(bool multiColor)
         {
@@ -22,10 +28,10 @@ namespace EditStateSprite
             else
                 ColorMap = new MonochromeSpriteColorMap(this);
 
-            SpritePalette = new ColorName[ColorMap.ColorCount];
+            SpriteColorPalette = new ColorName[ColorMap.ColorCount];
 
-            for (var i = 0; i < SpritePalette.Length; i++)
-                SpritePalette[i] = (ColorName)i;
+            for (var i = 0; i < SpriteColorPalette.Length; i++)
+                SpriteColorPalette[i] = (ColorName)i;
 
             PreviewOffsetX = 0;
             PreviewOffsetY = 0;

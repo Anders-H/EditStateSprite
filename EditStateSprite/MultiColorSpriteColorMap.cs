@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace EditStateSprite
+﻿namespace EditStateSprite
 {
     public class MultiColorSpriteColorMap : SpriteColorMapBase
     {
@@ -9,11 +7,6 @@ namespace EditStateSprite
 
         public MultiColorSpriteColorMap(SpriteRoot parent) : base(parent)
         {
-        }
-
-        public override void PaintPreview(Bitmap b, Graphics g)
-        {
-            
         }
     }
 }
