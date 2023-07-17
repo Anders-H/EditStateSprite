@@ -8,6 +8,7 @@ namespace TestProgram
     {
         private readonly Random _rnd = new Random();
         private readonly SpriteList _sprites;
+        private Editor Editor { get; set; }
 
         public Form1()
         {
@@ -18,9 +19,11 @@ namespace TestProgram
         private void Form1_Load(object sender, EventArgs e)
         {
             _sprites.Add(new SpriteRoot(false));
-            Randomize(_sprites[0], 20, 20);
+            Randomize(_sprites[0], 420, 20);
             _sprites.Add(new SpriteRoot(true));
-            Randomize(_sprites[1], 20, 150);
+            Randomize(_sprites[1], 420, 150);
+
+            Editor = new Editor(_sprites[0]);
         }
 
         private void Randomize(SpriteRoot sprite, int posX, int posY)
@@ -44,6 +47,7 @@ namespace TestProgram
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             _sprites.PaintPreview(e.Graphics);
+            Editor.PaintEditor(e.Graphics);
         }
     }
 }

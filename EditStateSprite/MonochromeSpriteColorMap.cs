@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace EditStateSprite
+﻿namespace EditStateSprite
 {
     public class MonochromeSpriteColorMap : SpriteColorMapBase
     {

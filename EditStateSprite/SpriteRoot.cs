@@ -1,4 +1,5 @@
-﻿using C64Color;
+﻿using System.Drawing;
+using C64Color;
 
 namespace EditStateSprite
 {

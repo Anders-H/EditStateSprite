@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor.cs" />
     <Compile Include="MonochromeSpriteColorMap.cs" />
     <Compile Include="MultiColorSpriteColorMap.cs" />
     <Compile Include="SpriteColorMapBase.cs" />
