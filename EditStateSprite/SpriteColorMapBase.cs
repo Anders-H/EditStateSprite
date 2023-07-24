@@ -5,7 +5,7 @@ namespace EditStateSprite
 {
     public abstract class SpriteColorMapBase
     {
-        protected int[,] Colors;
+        internal int[,] Colors;
         protected SpriteRoot Parent { get; }
         public abstract int Width { get; }
         public int Height => 21;

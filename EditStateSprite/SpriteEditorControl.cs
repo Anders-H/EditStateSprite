@@ -7,7 +7,7 @@ namespace EditStateSprite
     {
         private int _currentColorIndex = 0;
         private SpriteRoot _sprite;
-        private Editor Editor { get; set; }
+        private Editor Editor { get; }
         public event SpriteChangedDelegate SpriteChanged;
 
         public SpriteEditorControl()
@@ -21,6 +21,13 @@ namespace EditStateSprite
             _sprite = sprite;
             Editor.ChangeCurrentSprite(_sprite);
             Invalidate();
+        }
+
+        public void Scroll(FourWayDirection direction)
+        {
+            Editor.Scroll(direction);
+            Invalidate();
+            SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
         }
 
         protected override void OnResize(EventArgs e)

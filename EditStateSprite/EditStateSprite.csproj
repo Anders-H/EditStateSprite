@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Editor.cs" />
+    <Compile Include="FourWayDirection.cs" />
     <Compile Include="MonochromeSpriteColorMap.cs" />
     <Compile Include="MultiColorSpriteColorMap.cs" />
     <Compile Include="SpriteChangedDelegate.cs" />
@@ -56,11 +57,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SpriteList.cs" />
+    <Compile Include="SpriteModifiers\SpriteScrollModifiers.cs" />
     <Compile Include="SpriteRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

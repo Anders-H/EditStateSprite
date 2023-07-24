@@ -1,5 +1,7 @@
-﻿using C64Color;
+﻿using System;
+using C64Color;
 using System.Drawing;
+using EditStateSprite.SpriteModifiers;
 
 namespace EditStateSprite
 {
@@ -33,6 +35,27 @@ namespace EditStateSprite
 
             EditorColorButtonMatrix[pixelX, pixelY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
             CurrentSprite.SetPixel(pixelX, pixelY, colorIndex);
+        }
+
+        internal void Scroll(FourWayDirection direction)
+        {
+            switch (direction)
+            {
+                case FourWayDirection.Up:
+                    new SpriteScrollModifiers(CurrentSprite.ColorMap).ScrollUp();
+                    break;
+                case FourWayDirection.Right:
+                    new SpriteScrollModifiers(CurrentSprite.ColorMap).ScrollRight();
+                    break;
+                case FourWayDirection.Down:
+                    new SpriteScrollModifiers(CurrentSprite.ColorMap).ScrollDown();
+                    break;
+                case FourWayDirection.Left:
+                    new SpriteScrollModifiers(CurrentSprite.ColorMap).ScrollLeft();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
         }
 
         public void ChangeCurrentSprite(SpriteRoot currentSprite)

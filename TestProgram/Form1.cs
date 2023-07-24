@@ -58,5 +58,29 @@ namespace TestProgram
         {
             Invalidate();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Scroll(FourWayDirection.Up);
+            spriteEditorControl2.Scroll(FourWayDirection.Up);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Scroll(FourWayDirection.Down);
+            spriteEditorControl2.Scroll(FourWayDirection.Down);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Scroll(FourWayDirection.Left);
+            spriteEditorControl2.Scroll(FourWayDirection.Left);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Scroll(FourWayDirection.Right);
+            spriteEditorControl2.Scroll(FourWayDirection.Right);
+        }
     }
 }
