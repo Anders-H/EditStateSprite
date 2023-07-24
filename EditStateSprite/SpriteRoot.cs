@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System;
 using C64Color;
 
 namespace EditStateSprite
@@ -38,6 +38,17 @@ namespace EditStateSprite
             PreviewOffsetY = 0;
             ExpandX = false;
             ExpandY = false;
+        }
+
+        public void SetPixel(int x, int y, int colorIndex)
+        {
+            if (x < 0 || x > ColorMap.Width || y < 0 || y > ColorMap.Height)
+                throw new ArgumentOutOfRangeException($@"{x}*{y}");
+
+            if (colorIndex < 0 || colorIndex > ColorMap.ColorCount)
+                throw new ArgumentOutOfRangeException($@"colorIndex: {colorIndex}");
+
+            ColorMap.SetColorIndex(x, y, colorIndex);
         }
 
         public int GetPreviewPixelWidth()

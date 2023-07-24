@@ -28,17 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
+            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.SuspendLayout();
-            // 
-            // spriteEditorControl1
-            // 
-            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
-            this.spriteEditorControl1.Name = "spriteEditorControl1";
-            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
-            this.spriteEditorControl1.TabIndex = 0;
-            this.spriteEditorControl1.Text = "spriteEditorControl1";
             // 
             // spriteEditorControl2
             // 
@@ -47,6 +39,16 @@
             this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
             this.spriteEditorControl2.TabIndex = 1;
             this.spriteEditorControl2.Text = "spriteEditorControl2";
+            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
+            // 
+            // spriteEditorControl1
+            // 
+            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
+            this.spriteEditorControl1.Name = "spriteEditorControl1";
+            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
+            this.spriteEditorControl1.TabIndex = 0;
+            this.spriteEditorControl1.Text = "spriteEditorControl1";
+            this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
             // 
             // Form1
             // 
@@ -55,6 +57,7 @@
             this.ClientSize = new System.Drawing.Size(800, 686);
             this.Controls.Add(this.spriteEditorControl2);
             this.Controls.Add(this.spriteEditorControl1);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

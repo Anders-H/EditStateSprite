@@ -48,5 +48,15 @@ namespace TestProgram
         {
             _sprites.PaintPreview(e.Graphics);
         }
+
+        private void spriteEditorControl1_SpriteChanged(object sender, SpriteChangedEventArgs e)
+        {
+            Invalidate();
+        }
+
+        private void spriteEditorControl2_SpriteChanged(object sender, SpriteChangedEventArgs e)
+        {
+            Invalidate();
+        }
     }
 }

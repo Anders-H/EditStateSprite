@@ -49,6 +49,8 @@
     <Compile Include="Editor.cs" />
     <Compile Include="MonochromeSpriteColorMap.cs" />
     <Compile Include="MultiColorSpriteColorMap.cs" />
+    <Compile Include="SpriteChangedDelegate.cs" />
+    <Compile Include="SpriteChangedEventArgs.cs" />
     <Compile Include="SpriteColorMapBase.cs" />
     <Compile Include="SpriteEditorControl.cs">
       <SubType>Component</SubType>

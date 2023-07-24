@@ -23,6 +23,18 @@ namespace EditStateSprite
             ChangeCurrentSprite(currentSprite);
         }
 
+        public void SetPixel(int editorX, int editorY, int colorIndex)
+        {
+            var pixelX = editorX / EditorButtonWidth;
+            var pixelY = editorY / EditorButtonHeight;
+
+            if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
+                return;
+
+            EditorColorButtonMatrix[pixelX, pixelY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
+            CurrentSprite.SetPixel(pixelX, pixelY, colorIndex);
+        }
+
         public void ChangeCurrentSprite(SpriteRoot currentSprite)
         {
             CurrentSprite = currentSprite;
