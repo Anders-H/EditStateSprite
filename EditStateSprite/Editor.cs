@@ -41,6 +41,32 @@ namespace EditStateSprite
             CurrentSprite.SetPixel(pixelX, pixelY, colorIndex);
         }
 
+        public void SetPixelAtCursor(int colorIndex)
+        {
+            if (_cursorX < 0 || _cursorX > CurrentSprite.ColorMap.Width || _cursorY < 0 || _cursorY > CurrentSprite.ColorMap.Height)
+                return;
+
+            EditorColorButtonMatrix[_cursorX, _cursorY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
+            CurrentSprite.SetPixel(_cursorX, _cursorY, colorIndex);
+        }
+
+        public void MoveCursor(int x, int y)
+        {
+            _cursorX += x;
+
+            if (_cursorX < 0)
+                _cursorX = CurrentSprite.ColorMap.Width - 1;
+            else if (_cursorX >= CurrentSprite.ColorMap.Width)
+                _cursorX = 0;
+
+            _cursorY += y;
+
+            if (_cursorY < 0)
+                _cursorY = CurrentSprite.ColorMap.Height - 1;
+            else if (_cursorY >= CurrentSprite.ColorMap.Height)
+                _cursorY = 0;
+        }
+
         internal void Scroll(FourWayDirection direction)
         {
             switch (direction)
