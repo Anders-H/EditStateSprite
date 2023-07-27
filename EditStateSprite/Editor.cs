@@ -7,6 +7,8 @@ namespace EditStateSprite
 {
     public class Editor
     {
+        private int _cursorX;
+        private int _cursorY;
         internal static Renderer Renderer { get; }
         internal static IResources Resources { get; }
         public int EditorButtonWidth { get; set; }
@@ -33,6 +35,8 @@ namespace EditStateSprite
             if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
                 return;
 
+            _cursorX = pixelX;
+            _cursorY = pixelY;
             EditorColorButtonMatrix[pixelX, pixelY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
             CurrentSprite.SetPixel(pixelX, pixelY, colorIndex);
         }
@@ -77,6 +81,9 @@ namespace EditStateSprite
 
         public void ChangeCurrentSprite(SpriteRoot currentSprite)
         {
+            _cursorX = 0;
+            _cursorY = 0;
+
             CurrentSprite = currentSprite;
 
             if (CurrentSprite.MultiColor)
@@ -110,13 +117,16 @@ namespace EditStateSprite
             }
         }
 
-        public void PaintEditor(Graphics g)
+        public void PaintEditor(Graphics g, bool hasFocus)
         {
             for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
             {
                 for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
                 {
-                    Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
+                    if (hasFocus && w == _cursorX && h == _cursorY)
+                        Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
+                    else
+                        Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
                 }
             }
         }

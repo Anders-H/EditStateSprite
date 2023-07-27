@@ -46,16 +46,28 @@ namespace EditStateSprite
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Editor.PaintEditor(e.Graphics);
+            Editor.PaintEditor(e.Graphics, Focused);
             base.OnPaint(e);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            Invalidate();
+            base.OnGotFocus(e);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            Invalidate();
+            base.OnLostFocus(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            base.OnMouseClick(e);
             Editor.SetPixel(e.X, e.Y, _currentColorIndex);
             Invalidate();
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
-            base.OnMouseClick(e);
         }
     }
 }

@@ -28,33 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
-            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
+            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.SuspendLayout();
-            // 
-            // spriteEditorControl2
-            // 
-            this.spriteEditorControl2.Location = new System.Drawing.Point(396, 308);
-            this.spriteEditorControl2.Name = "spriteEditorControl2";
-            this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
-            this.spriteEditorControl2.TabIndex = 1;
-            this.spriteEditorControl2.Text = "spriteEditorControl2";
-            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
-            // 
-            // spriteEditorControl1
-            // 
-            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
-            this.spriteEditorControl1.Name = "spriteEditorControl1";
-            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
-            this.spriteEditorControl1.TabIndex = 0;
-            this.spriteEditorControl1.Text = "spriteEditorControl1";
-            this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
             // 
             // button1
             // 
@@ -115,6 +97,26 @@
             this.button6.Text = "Flip up/down";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // spriteEditorControl2
+            // 
+            this.spriteEditorControl2.Location = new System.Drawing.Point(396, 308);
+            this.spriteEditorControl2.Name = "spriteEditorControl2";
+            this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
+            this.spriteEditorControl2.TabIndex = 1;
+            this.spriteEditorControl2.Text = "spriteEditorControl2";
+            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
+            this.spriteEditorControl2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl2_MouseClick);
+            // 
+            // spriteEditorControl1
+            // 
+            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
+            this.spriteEditorControl1.Name = "spriteEditorControl1";
+            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
+            this.spriteEditorControl1.TabIndex = 0;
+            this.spriteEditorControl1.Text = "spriteEditorControl1";
+            this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
+            this.spriteEditorControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl1_MouseClick);
             // 
             // Form1
             // 

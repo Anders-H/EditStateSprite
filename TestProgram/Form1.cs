@@ -94,5 +94,15 @@ namespace TestProgram
             spriteEditorControl1.Flip(TwoWayDirection.TopDown);
             spriteEditorControl2.Flip(TwoWayDirection.TopDown);
         }
+
+        private void spriteEditorControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            spriteEditorControl1.Focus();
+        }
+
+        private void spriteEditorControl2_MouseClick(object sender, MouseEventArgs e)
+        {
+            spriteEditorControl2.Focus();
+        }
     }
 }
