@@ -30,6 +30,13 @@ namespace EditStateSprite
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
         }
 
+        public void Flip(TwoWayDirection direction)
+        {
+            Editor.Flip(direction);
+            Invalidate();
+            SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+        }
+
         protected override void OnResize(EventArgs e)
         {
             Width = 359;

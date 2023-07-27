@@ -82,5 +82,17 @@ namespace TestProgram
             spriteEditorControl1.Scroll(FourWayDirection.Right);
             spriteEditorControl2.Scroll(FourWayDirection.Right);
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Flip(TwoWayDirection.LeftRight);
+            spriteEditorControl2.Flip(TwoWayDirection.LeftRight);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Flip(TwoWayDirection.TopDown);
+            spriteEditorControl2.Flip(TwoWayDirection.TopDown);
+        }
     }
 }

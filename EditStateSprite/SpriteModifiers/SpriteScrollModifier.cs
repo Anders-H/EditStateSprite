@@ -1,16 +1,9 @@
 ﻿namespace EditStateSprite.SpriteModifiers
 {
-    public class SpriteScrollModifiers
+    public class SpriteScrollModifier : Modifier
     {
-        private readonly int[,] _colors;
-        private readonly int _width;
-        private readonly int _height;
-
-        public SpriteScrollModifiers(int[,] colors)
+        public SpriteScrollModifier(int[,] colors) : base(colors)
         {
-            _colors = colors;
-            _width = _colors.GetLength(0);
-            _height = _colors.GetLength(1);
         }
 
         public void ScrollUp()

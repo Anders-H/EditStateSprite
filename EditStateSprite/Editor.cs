@@ -42,16 +42,32 @@ namespace EditStateSprite
             switch (direction)
             {
                 case FourWayDirection.Up:
-                    new SpriteScrollModifiers(CurrentSprite.ColorMap.Colors).ScrollUp();
+                    new SpriteScrollModifier(CurrentSprite.ColorMap.Colors).ScrollUp();
                     break;
                 case FourWayDirection.Right:
-                    new SpriteScrollModifiers(CurrentSprite.ColorMap.Colors).ScrollRight();
+                    new SpriteScrollModifier(CurrentSprite.ColorMap.Colors).ScrollRight();
                     break;
                 case FourWayDirection.Down:
-                    new SpriteScrollModifiers(CurrentSprite.ColorMap.Colors).ScrollDown();
+                    new SpriteScrollModifier(CurrentSprite.ColorMap.Colors).ScrollDown();
                     break;
                 case FourWayDirection.Left:
-                    new SpriteScrollModifiers(CurrentSprite.ColorMap.Colors).ScrollLeft();
+                    new SpriteScrollModifier(CurrentSprite.ColorMap.Colors).ScrollLeft();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+            ChangeCurrentSprite(CurrentSprite);
+        }
+
+        internal void Flip(TwoWayDirection direction)
+        {
+            switch (direction)
+            {
+                case TwoWayDirection.LeftRight:
+                    new SpriteFlipModifier(CurrentSprite.ColorMap.Colors).FlipLeftRight();
+                    break;
+                case TwoWayDirection.TopDown:
+                    new SpriteFlipModifier(CurrentSprite.ColorMap.Colors).FlipTopDown();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);

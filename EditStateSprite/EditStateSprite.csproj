@@ -57,9 +57,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SpriteList.cs" />
-    <Compile Include="SpriteModifiers\SpriteScrollModifiers.cs" />
+    <Compile Include="SpriteModifiers\Modifier.cs" />
+    <Compile Include="SpriteModifiers\SpriteFlipModifier.cs" />
+    <Compile Include="SpriteModifiers\SpriteScrollModifier.cs" />
     <Compile Include="SpriteRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwoWayDirection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
