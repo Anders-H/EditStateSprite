@@ -67,6 +67,18 @@ namespace EditStateSprite
                 _cursorY = 0;
         }
 
+        public void Clear()
+        {
+            for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+            {
+                for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+                {
+                    CurrentSprite.ColorMap.SetColorIndex(w, h, 0);
+                    EditorColorButtonMatrix[w, h].Color = CurrentSprite.SpriteColorPalette[0];
+                }
+            }
+        }
+
         internal void Scroll(FourWayDirection direction)
         {
             switch (direction)
@@ -103,6 +115,13 @@ namespace EditStateSprite
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
             }
             ChangeCurrentSprite(CurrentSprite);
+        }
+
+        internal void UpdateEditorButtons()
+        {
+            for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+                for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+                    EditorColorButtonMatrix[w, h].Color = CurrentSprite.SpriteColorPalette[CurrentSprite.ColorMap.Colors[w, h]];
         }
 
         public void ChangeCurrentSprite(SpriteRoot currentSprite)

@@ -104,5 +104,17 @@ namespace TestProgram
         {
             spriteEditorControl2.Focus();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.Clear();
+            spriteEditorControl2.Clear();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.SetPalette(C64ColorName.Green, C64ColorName.LightGreen);
+            spriteEditorControl2.SetPalette(C64ColorName.Blue, C64ColorName.LightBlue, C64ColorName.Orange, C64ColorName.Brown);
+        }
     }
 }
