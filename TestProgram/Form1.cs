@@ -113,8 +113,8 @@ namespace TestProgram
 
         private void button8_Click(object sender, EventArgs e)
         {
-            spriteEditorControl1.SetPalette(C64ColorName.Green, C64ColorName.LightGreen);
-            spriteEditorControl2.SetPalette(C64ColorName.Blue, C64ColorName.LightBlue, C64ColorName.Orange, C64ColorName.Brown);
+            spriteEditorControl1.SetPalette(ColorName.Green, ColorName.LightGreen);
+            spriteEditorControl2.SetPalette(ColorName.Blue, ColorName.LightBlue, ColorName.Orange, ColorName.Brown);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using C64Color;
+using EditStateSprite.Col;
 
 namespace EditStateSprite
 {

@@ -1,6 +1,6 @@
 ﻿namespace EditStateSprite
 {
-    public enum C64ColorName
+    public enum ColorName
     {
         Black,
         White,

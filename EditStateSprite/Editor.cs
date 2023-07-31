@@ -1,6 +1,6 @@
 ﻿using System;
-using C64Color;
 using System.Drawing;
+using EditStateSprite.Col;
 using EditStateSprite.SpriteModifiers;
 
 namespace EditStateSprite
