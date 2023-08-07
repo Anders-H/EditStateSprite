@@ -23,6 +23,28 @@ namespace EditStateSprite
             Invalidate();
         }
 
+        public void SetCurrentColorIndex(int colorIndex)
+        {
+            _currentColorIndex = colorIndex;
+
+            if (_currentColorIndex < 0)
+                _currentColorIndex = 0;
+
+            if (_sprite == null)
+                return;
+
+            if (_sprite.MultiColor)
+            {
+                if (_currentColorIndex > 3)
+                    _currentColorIndex = 3;
+            }
+            else
+            {
+                if (_currentColorIndex > 1)
+                    _currentColorIndex = 1;
+            }
+        }
+
         public void Scroll(FourWayDirection direction)
         {
             Editor.Scroll(direction);
