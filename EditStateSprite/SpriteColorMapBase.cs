@@ -28,7 +28,7 @@ namespace EditStateSprite
         public Color GetColorFromPosition(int x, int y) =>
             SpriteRoot.C64Palette.GetColor(GetColorNameFromPosition(x, y));
 
-        public void PaintPreview(Graphics g)
+        public void PaintPreview(Graphics g, int locationX, int locationY)
         {
             var pixelWidth = Parent.GetPreviewPixelWidth();
             var pixelHeight = Parent.GetPreviewPixelHeight();
@@ -110,8 +110,11 @@ namespace EditStateSprite
                     }
                 }
 
-                g.DrawImage(b, Parent.PreviewOffsetX, Parent.PreviewOffsetY);
+                g.DrawImage(b, locationX, locationY);
             }
         }
+
+        public void PaintPreview(Graphics g) =>
+            PaintPreview(g, Parent.PreviewOffsetX, Parent.PreviewOffsetY);
     }
 }
