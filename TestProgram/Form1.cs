@@ -116,5 +116,11 @@ namespace TestProgram
             spriteEditorControl1.SetPalette(ColorName.Green, ColorName.LightGreen);
             spriteEditorControl2.SetPalette(ColorName.Blue, ColorName.LightBlue, ColorName.Orange, ColorName.Brown);
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.ToggleColorMode();
+            spriteEditorControl2.ToggleColorMode();
+        }
     }
 }

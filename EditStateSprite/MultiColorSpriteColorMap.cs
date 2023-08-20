@@ -8,5 +8,30 @@
         public MultiColorSpriteColorMap(SpriteRoot parent) : base(parent)
         {
         }
+
+        public void InitializeFromMonochrome(SpriteColorMapBase colorMap)
+        {
+            for (var y = 0; y < 21; y++)
+            {
+                var sourceX = 0;
+
+                for (var x = 0; x < 12; x++)
+                {
+                    var sourceColor1 = colorMap.GetColorIndex(sourceX, y);
+                    var sourceColor2 = colorMap.GetColorIndex(sourceX + 1, y);
+
+                    if (sourceColor1 == 0 && sourceColor2 > 0)
+                        SetColorIndex(x, y, 1);
+                    else if (sourceColor1 > 0 && sourceColor2 == 0)
+                        SetColorIndex(x, y, 2);
+                    else if (sourceColor1 > 0 && sourceColor2 > 0)
+                        SetColorIndex(x, y, 3);
+                    else
+                        SetColorIndex(x, y, 0);
+
+                    sourceX += 2;
+                }
+            }
+        }
     }
 }

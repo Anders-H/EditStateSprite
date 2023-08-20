@@ -179,5 +179,19 @@ namespace EditStateSprite
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
             base.OnKeyDown(e);
         }
+
+        public void ToggleColorMode()
+        {
+            Editor.ResetCursorPosition();
+
+            if (_sprite.MultiColor)
+                _sprite.ConvertToMonochrome();
+            else
+                _sprite.ConvertToMultiColor();
+
+            ConnectSprite(_sprite);
+            Invalidate();
+            SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+        }
     }
 }

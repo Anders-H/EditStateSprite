@@ -5,10 +5,11 @@ namespace EditStateSprite
 {
     public class SpriteRoot
     {
+        private static Random Rnd { get; }
         public static Palette C64Palette { get; }
-        public bool MultiColor { get; }
-        public SpriteColorMapBase ColorMap { get; }
-        public ColorName[] SpriteColorPalette { get; }
+        public bool MultiColor { get; private set; }
+        public SpriteColorMapBase ColorMap { get; private set; }
+        public ColorName[] SpriteColorPalette { get; private set; }
         public int PreviewOffsetX { get; set; }
         public int PreviewOffsetY { get; set; }
         public bool ExpandX { get; set; }
@@ -17,6 +18,7 @@ namespace EditStateSprite
 
         static SpriteRoot()
         {
+            Rnd = new Random();
             C64Palette = new Palette();
         }
 
@@ -51,6 +53,32 @@ namespace EditStateSprite
             ColorMap.SetColorIndex(x, y, colorIndex);
         }
 
+        public void ConvertToMultiColor()
+        {
+            if (MultiColor)
+                return;
+
+            var newColorMap = new MultiColorSpriteColorMap(this);
+
+            MultiColor = true;
+            CreateMultiColorPalette();
+            newColorMap.InitializeFromMonochrome(ColorMap);
+            ColorMap = newColorMap;
+        }
+
+        public void ConvertToMonochrome()
+        {
+            if (!MultiColor)
+                return;
+
+            var newColorMap = new MonochromeSpriteColorMap(this);
+
+            MultiColor = false;
+            newColorMap.InitializeFromMultiColor(ColorMap);
+            ColorMap = newColorMap;
+            CreateMonochromePalette();
+        }
+
         public int GetPreviewPixelWidth()
         {
             var w = MultiColor ? 2 : 1;
@@ -73,5 +101,48 @@ namespace EditStateSprite
 
             return h;
         }
+
+        private void CreateMonochromePalette()
+        {
+            var p = new ColorName[2];
+            p[0] = SpriteColorPalette[0];
+            p[1] = SpriteColorPalette[1];
+            SpriteColorPalette = p;
+        }
+
+        private void CreateMultiColorPalette()
+        {
+            var p = new ColorName[4];
+            p[0] = SpriteColorPalette[0];
+            p[1] = SpriteColorPalette[1];
+            p[2] = GetRandomColor(p[0], p[1]);
+            p[3] = GetRandomColor(p[0], p[1], p[2]);
+            SpriteColorPalette = p;
+        }
+
+        private ColorName GetRandomColor(params ColorName[] exclude)
+        {
+            bool found;
+            ColorName ret;
+            do
+            {
+                found = false;
+                ret = RandomColor();
+                foreach (var e in exclude)
+                {
+                    if (e == ret)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+            } while (found);
+
+            return ret;
+        }
+
+        private ColorName RandomColor() =>
+            (ColorName)Rnd.Next(0, 16);
     }
 }

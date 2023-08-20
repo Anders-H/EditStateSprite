@@ -24,7 +24,14 @@ namespace EditStateSprite
 
         public Editor(SpriteRoot currentSprite)
         {
+            ResetCursorPosition();
             ChangeCurrentSprite(currentSprite);
+        }
+
+        public void ResetCursorPosition()
+        {
+            _cursorX = 0;
+            _cursorY = 0;
         }
 
         public void SetPixel(int editorX, int editorY, int colorIndex)
