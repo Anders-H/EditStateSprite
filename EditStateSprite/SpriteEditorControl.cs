@@ -47,14 +47,18 @@ namespace EditStateSprite
 
         public void Scroll(FourWayDirection direction)
         {
+            var cursorPosition = Editor.GetCursorPosition();
             Editor.Scroll(direction);
+            Editor.SetCursorPosition(cursorPosition);
             Invalidate();
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
         }
 
         public void Flip(TwoWayDirection direction)
         {
+            var cursorPosition = Editor.GetCursorPosition();
             Editor.Flip(direction);
+            Editor.SetCursorPosition(cursorPosition);
             Invalidate();
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
         }

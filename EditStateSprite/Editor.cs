@@ -28,6 +28,15 @@ namespace EditStateSprite
             ChangeCurrentSprite(currentSprite);
         }
 
+        public Point GetCursorPosition() =>
+            new Point(_cursorX,  _cursorY);
+
+        public void SetCursorPosition(Point position)
+        {
+            _cursorX = position.X;
+            _cursorY = position.Y;
+        }
+
         public void ResetCursorPosition()
         {
             _cursorX = 0;
