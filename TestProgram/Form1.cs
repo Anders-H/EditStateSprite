@@ -122,5 +122,17 @@ namespace TestProgram
             spriteEditorControl1.ToggleColorMode();
             spriteEditorControl2.ToggleColorMode();
         }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            _sprites.Load(@"D:\Temp\sprites.sprdef");
+            spriteEditorControl1.ConnectSprite(_sprites[0]);
+            spriteEditorControl2.ConnectSprite(_sprites[1]);
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            _sprites.Save(@"D:\Temp\sprites.sprdef");
+        }
     }
 }
