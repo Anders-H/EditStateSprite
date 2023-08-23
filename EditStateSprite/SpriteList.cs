@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -43,6 +44,7 @@ namespace EditStateSprite
 
         public void Serialize(StringBuilder s)
         {
+            s.AppendLine($"BEGIN FILE ({DateTime.Now:yyyy-MM-dd})");
             s.AppendLine("DOCUMENT TYPE=SPRIDEF2");
             s.AppendLine("DOCUMENT VERSION=1.0");
             s.AppendLine($"BEGIN SPRITES ({Count})");
@@ -59,6 +61,7 @@ namespace EditStateSprite
 
             s.AppendLine();
             s.AppendLine("END SPRITES");
+            s.Append("END FILE");
         }
 
         public void Deserialize(string s)

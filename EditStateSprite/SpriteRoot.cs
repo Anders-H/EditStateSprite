@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using EditStateSprite.Col;
 
 namespace EditStateSprite
@@ -144,5 +145,35 @@ namespace EditStateSprite
 
         private ColorName RandomColor() =>
             (ColorName)Rnd.Next(0, 16);
+
+        public void Serialize(StringBuilder s)
+        {
+            s.AppendLine($"MULTICOLOR={(MultiColor ? "YES" : "NO")}");
+            s.AppendLine($"PREVIEW OFFSET={PreviewOffsetX},{PreviewOffsetY}");
+
+            var expandString = ExpandY ? "Y" : "NO";
+
+            switch (ExpandX)
+            {
+                case true when ExpandY:
+                    expandString = "XY";
+                    break;
+                case true:
+                    expandString = "X";
+                    break;
+            }
+
+            s.AppendLine($"EXPAND={expandString}");
+            s.AppendLine($"PREVIEW ZOOM={(PreviewZoom ? "YES" : "NO")}");
+            s.AppendLine($"COLOR PALETTE={SerializeColorPalette()}");
+            
+            for (var y = 0; y < 21; y++)
+                s.AppendLine($"SPRITE ROW DATA ({y + 1}/21)={SerializeSpriteData(y)}");
+        }
+
+        private string SerializeColorPalette() =>
+            MultiColor
+                ? $"{SpriteColorPalette[0]}-{SpriteColorPalette[1]}-{SpriteColorPalette[2]}-{SpriteColorPalette[3]}"
+                : $"{SpriteColorPalette[0]}-{SpriteColorPalette[1]}";
     }
 }
