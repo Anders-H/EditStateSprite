@@ -128,6 +128,7 @@ namespace TestProgram
             _sprites.Load(@"D:\Temp\sprites.sprdef");
             spriteEditorControl1.ConnectSprite(_sprites[0]);
             spriteEditorControl2.ConnectSprite(_sprites[1]);
+            Invalidate();
         }
 
         private void button11_Click(object sender, EventArgs e)

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace EditStateSprite
 {
@@ -66,7 +70,95 @@ namespace EditStateSprite
 
         public void Deserialize(string s)
         {
+            try
+            {
+                Clear();
 
+                var lines = s.Split(
+                    new[] { Environment.NewLine },
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+
+                for (var i = 0; i < lines.Length; i++)
+                    lines[i] = lines[i].Trim().ToUpper();
+
+                var index = 0;
+
+                var beginFile = Regex.Match(lines[index], @"^BEGIN FILE \(([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])\)$");
+
+                if (!beginFile.Success)
+                    throw new SerializationException("The first line should be a BEGIN FILE declaration.");
+
+                var saveDateString = beginFile.Groups[1].Value.Split('-');
+
+                try
+                {
+                    var _ = new DateTime(int.Parse(saveDateString[0]), int.Parse(saveDateString[1]), int.Parse(saveDateString[2]));
+                }
+                catch
+                {
+                    throw new SerializationException("BEGIN FILE declaration is incorrect.");
+                }
+
+                index++;
+
+                if (lines[index] != "DOCUMENT TYPE=SPRIDEF2")
+                    throw new SerializationException("Incorrect DOCUMENT TYPE.");
+
+                index++;
+
+                if (!lines[index].StartsWith("DOCUMENT VERSION="))
+                    throw new SerializationException("Expected DOCUMENT VERSION.");
+
+                var versionParts = lines[index].Split('=');
+                var version = float.Parse(versionParts[1], NumberStyles.Any, CultureInfo.InvariantCulture);
+
+                if (version > 1.0)
+                    throw new SerializationException("This document is created using a newer version of SPRDEF2.");
+
+                index++;
+
+                if (!lines[index].StartsWith("BEGIN SPRITES ("))
+                    throw new SerializationException("Expected BEGIN SPRITES followed by sprite count.");
+
+                var beginSprites = Regex.Match(lines[index], @"^BEGIN SPRITES \(([0-9]+)\)$");
+
+                if (!beginSprites.Success)
+                    throw new SerializationException("Incorrect format on BEGIN SPRITES.");
+
+                var count = int.Parse(beginSprites.Groups[1].Value);
+
+                index++;
+
+                var spritesData = new List<List<string>>();
+
+                for (var i = 0; i < count; i++)
+                {
+                    var spriteData = new List<string>();
+                    do
+                    {
+                        spriteData.Add(lines[index]);
+                        index++;
+                    } while (!spriteData.Last().StartsWith("END SPRITE ("));
+
+                    spritesData.Add(spriteData);
+                }
+
+                if (lines[index] != "END SPRITES")
+                    throw new SerializationException("Expected END SPRITES.");
+
+                index++;
+
+                if (lines[index] != "END FILE")
+                    throw new SerializationException("Expected END FILE.");
+
+                foreach (var spriteData in spritesData)
+                    Add(SpriteRoot.Parse(spriteData));
+            }
+            catch (Exception e)
+            {
+                throw new SerializationException($"This file contain errors: {e.Message}");
+            }
         }
     }
 }
