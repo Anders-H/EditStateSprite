@@ -168,7 +168,7 @@ namespace EditStateSprite
             s.AppendLine($"COLOR PALETTE={SerializeColorPalette()}");
             
             for (var y = 0; y < 21; y++)
-                s.AppendLine($"SPRITE ROW DATA ({y + 1}/21)={SerializeSpriteData(y)}");
+                s.AppendLine($"SPRITE ROW DATA ({y + 1:00}/21)={ColorMap.SerializeSpriteData(y)}");
         }
 
         private string SerializeColorPalette() =>

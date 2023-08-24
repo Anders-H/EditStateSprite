@@ -1,4 +1,6 @@
-﻿namespace EditStateSprite
+﻿using System.Text;
+
+namespace EditStateSprite
 {
     public class MonochromeSpriteColorMap : SpriteColorMapBase
     {
@@ -7,6 +9,16 @@
 
         public MonochromeSpriteColorMap(SpriteRoot parent) : base(parent)
         {
+        }
+
+        public override string SerializeSpriteData(int y)
+        {
+            var s = new StringBuilder();
+
+            for (var x = 0; x < 24; x++)
+                s.Append(Colors[x, y].ToString());
+
+            return s.ToString();
         }
 
         public void InitializeFromMultiColor(SpriteColorMapBase colorMap)

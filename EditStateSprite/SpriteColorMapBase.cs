@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace EditStateSprite
 {
@@ -27,6 +28,8 @@ namespace EditStateSprite
 
         public Color GetColorFromPosition(int x, int y) =>
             SpriteRoot.C64Palette.GetColor(GetColorNameFromPosition(x, y));
+
+        public abstract string SerializeSpriteData(int y);
 
         public void PaintPreview(Graphics g, int locationX, int locationY)
         {
