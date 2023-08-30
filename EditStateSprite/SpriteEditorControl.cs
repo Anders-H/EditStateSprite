@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using EditStateSprite.Dialogs;
 
 namespace EditStateSprite
 {
     public class SpriteEditorControl : Control
     {
-        private int _currentColorIndex = 0;
+        private int _currentColorIndex;
         private SpriteRoot _sprite;
         private Editor Editor { get; }
         public event SpriteChangedDelegate SpriteChanged;
@@ -83,6 +84,17 @@ namespace EditStateSprite
             Editor.UpdateEditorButtons();
             Invalidate();
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+        }
+
+        public void PickPaletteColors(IWin32Window owner)
+        {
+            using (var x = new FourColorPaletteColorPicker())
+            {
+                x.Palette = _sprite.SpriteColorPalette;
+
+                if (x.ShowDialog(this) == DialogResult.OK)
+                    _sprite.SpriteColorPalette = x.Palette;
+            }
         }
 
         public void ModifyPalette(int paletteIndex, ColorName color)

@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorDropDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ColorName.cs" />
     <Compile Include="Col\ColorButton.cs" />
     <Compile Include="Col\IResources.cs" />
@@ -50,6 +53,12 @@
     <Compile Include="Col\Renderer.cs" />
     <Compile Include="Col\RendererFlags.cs" />
     <Compile Include="Col\Resources.cs" />
+    <Compile Include="Dialogs\FourColorPaletteColorPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\FourColorPaletteColorPicker.Designer.cs">
+      <DependentUpon>FourColorPaletteColorPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="FourWayDirection.cs" />
     <Compile Include="MonochromeSpriteColorMap.cs" />
@@ -68,6 +77,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwoWayDirection.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Dialogs\FourColorPaletteColorPicker.resx">
+      <DependentUpon>FourColorPaletteColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

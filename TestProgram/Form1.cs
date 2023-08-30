@@ -135,5 +135,11 @@ namespace TestProgram
         {
             _sprites.Save(@"D:\Temp\sprites.sprdef");
         }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.PickPaletteColors(this);
+            spriteEditorControl2.PickPaletteColors(this);
+        }
     }
 }

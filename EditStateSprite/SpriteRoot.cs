@@ -14,7 +14,7 @@ namespace EditStateSprite
         public static Palette C64Palette { get; }
         public bool MultiColor { get; private set; }
         public SpriteColorMapBase ColorMap { get; private set; }
-        public ColorName[] SpriteColorPalette { get; private set; }
+        public ColorName[] SpriteColorPalette { get; internal set; }
         public int PreviewOffsetX { get; set; }
         public int PreviewOffsetY { get; set; }
         public bool ExpandX { get; set; }

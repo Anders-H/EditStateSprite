@@ -34,13 +34,14 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
-            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
+            this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
+            this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -103,26 +104,6 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // spriteEditorControl2
-            // 
-            this.spriteEditorControl2.Location = new System.Drawing.Point(396, 308);
-            this.spriteEditorControl2.Name = "spriteEditorControl2";
-            this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
-            this.spriteEditorControl2.TabIndex = 1;
-            this.spriteEditorControl2.Text = "spriteEditorControl2";
-            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
-            this.spriteEditorControl2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl2_MouseClick);
-            // 
-            // spriteEditorControl1
-            // 
-            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
-            this.spriteEditorControl1.Name = "spriteEditorControl1";
-            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
-            this.spriteEditorControl1.TabIndex = 0;
-            this.spriteEditorControl1.Text = "spriteEditorControl1";
-            this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
-            this.spriteEditorControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl1_MouseClick);
-            // 
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(4, 116);
@@ -173,11 +154,42 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
+            // spriteEditorControl2
+            // 
+            this.spriteEditorControl2.Location = new System.Drawing.Point(396, 308);
+            this.spriteEditorControl2.Name = "spriteEditorControl2";
+            this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
+            this.spriteEditorControl2.TabIndex = 1;
+            this.spriteEditorControl2.Text = "spriteEditorControl2";
+            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
+            this.spriteEditorControl2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl2_MouseClick);
+            // 
+            // spriteEditorControl1
+            // 
+            this.spriteEditorControl1.Location = new System.Drawing.Point(16, 308);
+            this.spriteEditorControl1.Name = "spriteEditorControl1";
+            this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
+            this.spriteEditorControl1.TabIndex = 0;
+            this.spriteEditorControl1.Text = "spriteEditorControl1";
+            this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
+            this.spriteEditorControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl1_MouseClick);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(164, 116);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(84, 23);
+            this.button12.TabIndex = 13;
+            this.button12.Text = "Pick colors...";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 686);
+            this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -215,6 +227,7 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }
 
