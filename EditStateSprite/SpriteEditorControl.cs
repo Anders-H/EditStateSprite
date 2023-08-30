@@ -93,7 +93,10 @@ namespace EditStateSprite
                 x.Palette = _sprite.SpriteColorPalette;
 
                 if (x.ShowDialog(this) == DialogResult.OK)
+                {
                     _sprite.SpriteColorPalette = x.Palette;
+                    ConnectSprite(_sprite);
+                }
             }
         }
 

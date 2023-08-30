@@ -26,7 +26,14 @@ namespace EditStateSprite
 
         public void SetColor(ColorName color)
         {
+            foreach (var item in Items)
+            {
+                if (color != (ColorName)item)
+                    continue;
 
+                SelectedItem = item;
+                return;
+            }
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)

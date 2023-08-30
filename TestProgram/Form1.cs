@@ -140,6 +140,7 @@ namespace TestProgram
         {
             spriteEditorControl1.PickPaletteColors(this);
             spriteEditorControl2.PickPaletteColors(this);
+            Invalidate();
         }
     }
 }
