@@ -19,7 +19,7 @@ namespace TestProgram
         {
             _sprites.Add(new SpriteRoot(false));
             Randomize(_sprites[0], 420, 20);
-            _sprites.Add(new SpriteRoot(true));
+            _sprites.Add(new SpriteRoot(_sprites[0]));
             Randomize(_sprites[1], 420, 150);
 
             spriteEditorControl1.ConnectSprite(_sprites[0]);

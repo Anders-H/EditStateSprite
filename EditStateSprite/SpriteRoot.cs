@@ -47,6 +47,23 @@ namespace EditStateSprite
             ExpandY = false;
         }
 
+        public SpriteRoot(SpriteRoot sprite)
+        {
+            MultiColor = sprite.MultiColor;
+
+            if (MultiColor)
+                ColorMap = new MultiColorSpriteColorMap(this, (MultiColorSpriteColorMap)sprite.ColorMap);
+            else
+                ColorMap = new MonochromeSpriteColorMap(this, (MonochromeSpriteColorMap)sprite.ColorMap);
+
+            SpriteColorPalette = sprite.GetSpriteColorPalette();
+
+            PreviewOffsetX = sprite.PreviewOffsetX + 10;
+            PreviewOffsetY = sprite.PreviewOffsetY + 10;
+            ExpandX = sprite.ExpandX;
+            ExpandY = sprite.ExpandY;
+        }
+
         public static SpriteRoot Parse(List<string> lines)
         {
             var result = new SpriteRoot(lines.Any(x => x == "MULTICOLOR=YES"));
@@ -114,6 +131,16 @@ namespace EditStateSprite
                         result.SetPixel(i, rowIndex, int.Parse(pixelString.Substring(i, 1)));
                 }
             }
+
+            return result;
+        }
+
+        private ColorName[] GetSpriteColorPalette()
+        {
+            var result = MultiColor ? new ColorName[4] : new ColorName[2];
+
+            for (var i = 0; i < SpriteColorPalette.Length; i++)
+                result[i] = SpriteColorPalette[i];
 
             return result;
         }
