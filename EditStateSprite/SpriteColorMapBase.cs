@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace EditStateSprite
 {
@@ -14,6 +13,7 @@ namespace EditStateSprite
         protected SpriteColorMapBase(SpriteRoot parent)
         {
             Parent = parent;
+            // ReSharper disable once VirtualMemberCallInConstructor
             Colors = new int[Width, Height];
         }
 
@@ -119,5 +119,7 @@ namespace EditStateSprite
 
         public void PaintPreview(Graphics g) =>
             PaintPreview(g, Parent.PreviewOffsetX, Parent.PreviewOffsetY);
+
+        public abstract byte[] GetBytes();
     }
 }

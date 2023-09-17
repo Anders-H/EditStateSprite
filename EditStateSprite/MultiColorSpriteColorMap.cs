@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace EditStateSprite
 {
@@ -26,6 +27,55 @@ namespace EditStateSprite
                 s.Append(Colors[x, y].ToString());
 
             return s.ToString();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var result = new List<byte>();
+
+            for (var y = 0; y < 21; y++)
+            {
+                result.Add(GetByte(0, y));
+                result.Add(GetByte(4, y));
+                result.Add(GetByte(8, y));
+            }
+
+            return result.ToArray();
+        }
+
+        private byte GetByte(int x, int y)
+        {
+            var result = 0;
+
+            if (GetColorIndex(x, y) == 1)
+                result += 64;
+            else if (GetColorIndex(x, y) == 2)
+                result += 128;
+            else if (GetColorIndex(x, y) == 3)
+                result += 192;
+
+            if (GetColorIndex(x + 1, y) == 1)
+                result += 16;
+            else if (GetColorIndex(x + 1, y) == 2)
+                result += 32;
+            else if (GetColorIndex(x + 1, y) == 3)
+                result += 48;
+
+            if (GetColorIndex(x + 2, y) == 1)
+                result += 4;
+            else if (GetColorIndex(x + 2, y) == 2)
+                result += 8;
+            else if (GetColorIndex(x + 2, y) == 3)
+                result += 12;
+
+            if (GetColorIndex(x + 3, y) == 1)
+                result += 1;
+            else if (GetColorIndex(x + 3, y) == 2)
+                result += 2;
+            else if (GetColorIndex(x + 3, y) == 3)
+                result += 3;
+
+            return (byte)result;
         }
 
         public void InitializeFromMonochrome(SpriteColorMapBase colorMap)

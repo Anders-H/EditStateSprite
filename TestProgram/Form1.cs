@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Windows.Forms;
 using EditStateSprite;
 
@@ -141,6 +142,17 @@ namespace TestProgram
             spriteEditorControl1.PickPaletteColors(this);
             spriteEditorControl2.PickPaletteColors(this);
             Invalidate();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            var bytes = spriteEditorControl1.GetBytes();
+            var s = new StringBuilder();
+
+            for (var i = 0; i < bytes.Length; i++)
+                s.Append($@"{bytes[i]}{(i < bytes.Length - 1 ? ", " : "")}");
+
+            MessageBox.Show(s.ToString());
         }
     }
 }

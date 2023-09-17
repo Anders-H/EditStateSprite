@@ -212,5 +212,8 @@ namespace EditStateSprite
             Invalidate();
             SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
         }
+
+        public byte[] GetBytes() =>
+            _sprite.GetBytes();
     }
 }

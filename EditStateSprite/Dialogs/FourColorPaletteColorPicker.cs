@@ -12,7 +12,7 @@ namespace EditStateSprite.Dialogs
             InitializeComponent();
         }
 
-        private void FourColorPaletteColorPicker_Load(object sender, System.EventArgs e)
+        private void FourColorPaletteColorPicker_Load(object sender, EventArgs e)
         {
             colorDropDown1.SetColor(Palette[0]);
             colorDropDown2.SetColor(Palette[1]);

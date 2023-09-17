@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace EditStateSprite
 {
@@ -26,6 +27,51 @@ namespace EditStateSprite
                 s.Append(Colors[x, y].ToString());
 
             return s.ToString();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var result = new List<byte>();
+
+            for (var y = 0; y < 21; y++)
+            {
+                result.Add(GetByte(0, y));
+                result.Add(GetByte(8, y));
+                result.Add(GetByte(16, y));
+            }
+
+            return result.ToArray();
+        }
+
+        private byte GetByte(int x, int y)
+        {
+            var result = 0;
+
+            if (GetColorIndex(x, y) == 1)
+                result += 128;
+
+            if (GetColorIndex(x + 1, y) == 1)
+                result += 64;
+
+            if (GetColorIndex(x + 2, y) == 1)
+                result += 32;
+
+            if (GetColorIndex(x + 3, y) == 1)
+                result += 16;
+
+            if (GetColorIndex(x + 4, y) == 1)
+                result += 8;
+
+            if (GetColorIndex(x + 5, y) == 1)
+                result += 4;
+
+            if (GetColorIndex(x + 6, y) == 1)
+                result += 2;
+
+            if (GetColorIndex(x + 7, y) == 1)
+                result += 1;
+
+            return (byte)result;
         }
 
         public void InitializeFromMultiColor(SpriteColorMapBase colorMap)

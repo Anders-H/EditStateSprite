@@ -175,6 +175,9 @@ namespace EditStateSprite
 
         public void SetPixel(int x, int y, int colorIndex)
         {
+            if (ColorMap == null)
+                return;
+
             if (x < 0 || x > ColorMap.Width || y < 0 || y > ColorMap.Height)
                 throw new ArgumentOutOfRangeException($@"{x}*{y}");
 
@@ -296,5 +299,8 @@ namespace EditStateSprite
             MultiColor
                 ? $"{SpriteColorPalette[0]}-{SpriteColorPalette[1]}-{SpriteColorPalette[2]}-{SpriteColorPalette[3]}"
                 : $"{SpriteColorPalette[0]}-{SpriteColorPalette[1]}";
+
+        public byte[] GetBytes() =>
+            ColorMap.GetBytes();
     }
 }
