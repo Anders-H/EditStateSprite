@@ -25,6 +25,9 @@ namespace TestProgram
 
             spriteEditorControl1.ConnectSprite(_sprites[0]);
             spriteEditorControl2.ConnectSprite(_sprites[1]);
+
+            _sprites[0].Name = "Mr. Sprite part one";
+            _sprites[1].Name = "Mr. Sprite part two";
         }
 
         private void Randomize(SpriteRoot sprite, int posX, int posY)
@@ -130,6 +133,7 @@ namespace TestProgram
             spriteEditorControl1.ConnectSprite(_sprites[0]);
             spriteEditorControl2.ConnectSprite(_sprites[1]);
             Invalidate();
+            MessageBox.Show(_sprites[1].Name);
         }
 
         private void button11_Click(object sender, EventArgs e)

@@ -11,6 +11,7 @@ namespace EditStateSprite
     public class SpriteRoot
     {
         private static Random Rnd { get; }
+        public string Name { get; set; }
         public static Palette C64Palette { get; }
         public bool MultiColor { get; private set; }
         public SpriteColorMapBase ColorMap { get; private set; }
@@ -29,6 +30,7 @@ namespace EditStateSprite
 
         public SpriteRoot(bool multiColor)
         {
+            Name = "";
             MultiColor = multiColor;
 
             if (MultiColor)
@@ -49,6 +51,7 @@ namespace EditStateSprite
 
         public SpriteRoot(SpriteRoot sprite)
         {
+            Name = $"{sprite.Name} (copy)";
             MultiColor = sprite.MultiColor;
 
             if (MultiColor)
@@ -70,7 +73,11 @@ namespace EditStateSprite
 
             foreach (var line in lines)
             {
-                if (line.StartsWith("PREVIEW OFFSET="))
+                if (line.StartsWith("NAME="))
+                {
+                    result.Name = line.Substring(5).Trim();
+                }
+                else if (line.StartsWith("PREVIEW OFFSET="))
                 {
                     var offset = line.Split('=')[1];
                     var offsetParts = offset.Split(',');
@@ -272,6 +279,7 @@ namespace EditStateSprite
 
         public void Serialize(StringBuilder s)
         {
+            s.AppendLine($"NAME={Name}");
             s.AppendLine($"MULTICOLOR={(MultiColor ? "YES" : "NO")}");
             s.AppendLine($"PREVIEW OFFSET={PreviewOffsetX},{PreviewOffsetY}");
 
