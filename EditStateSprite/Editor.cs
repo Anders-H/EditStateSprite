@@ -29,12 +29,17 @@ namespace EditStateSprite
         }
 
         public Point GetCursorPosition() =>
-            new Point(_cursorX,  _cursorY);
+            new Point(_cursorX, _cursorY);
 
         public void SetCursorPosition(Point position)
         {
+            var y = position.Y;
+
+            if (y >= EditorColorButtonMatrix.GetLength(0))
+                y = EditorColorButtonMatrix.GetLength(0) - 1;
+
             _cursorX = position.X;
-            _cursorY = position.Y;
+            _cursorY = y;
         }
 
         public void ResetCursorPosition()

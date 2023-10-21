@@ -158,5 +158,18 @@ namespace TestProgram
 
             MessageBox.Show(s.ToString());
         }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            spriteEditorControl1.ConnectSprite(_sprites[0]);
+            spriteEditorControl1.Focus();
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            var code = spriteEditorControl1.GetBasicCode(10, 8192, 0, 5, 110, 110);
+            Clipboard.SetText(code);
+            MessageBox.Show(code);
+        }
     }
 }
