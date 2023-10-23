@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Forms;
+using EditStateSprite.CodeGeneration;
 using EditStateSprite.Dialogs;
 
 namespace EditStateSprite
@@ -230,70 +230,13 @@ namespace EditStateSprite
         /// Generates Commodore 64 BASIC code for displaying a sprite.
         /// </summary>
         /// <param name="lineNumber">BASIC line number (0 - 63999)</param>
+        /// <param name="spriteDataStartAddress"></param>
+        /// <param name="totalSpriteIndex"></param>
         /// <param name="hwSpriteIndex">Hardware sprite (0 - 7)</param>
+        /// <param name="x">C64 horizontal screen location</param>
+        /// <param name="y">C64 vertical screen location</param>
         /// <returns>Commodore BASIC 2.0 second release source code.</returns>
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int totalSpriteIndex, int hwSpriteIndex, int x, int y)
-        {
-            if (lineNumber < 0 || lineNumber > 63999 - 0)
-                throw new ArgumentOutOfRangeException(nameof(lineNumber));
-
-            if (hwSpriteIndex < 0 || hwSpriteIndex > 7)
-                throw new ArgumentOutOfRangeException(nameof(hwSpriteIndex));
-
-            var startAddress = spriteDataStartAddress / 64 + totalSpriteIndex;
-
-            var turnOnFlagPosition = new[] { 1, 2, 4, 8, 16, 32, 64, 128 };
-            var turnOffFlagPosition = new[] { 254, 253, 251, 247, 239, 223, 191, 127 };
-
-            var s = new StringBuilder();
-
-            s.AppendLine($"{lineNumber} poke53281,{(int)_sprite.SpriteColorPalette[0]}:poke2040,{startAddress + totalSpriteIndex}");
-
-            lineNumber++;
-            s.AppendLine($"{lineNumber} fora={spriteDataStartAddress}to{spriteDataStartAddress + 62}:readb:pokea,b:next");
-
-            var bytes = GetBytes();
-            for (var i = 0; i < 63; i++)
-                bytes[i] = (byte)i;
-
-            var chunks = new[] { 0, 11, 12, 23, 24, 35, 36, 48, 49, 62};
-
-            for (var n = 0; n < 10; n += 2)
-            {
-                lineNumber++;
-                s.Append($"{lineNumber} data{bytes[chunks[n]]}");
-                for (var i = chunks[n] + 1; i < chunks[n + 1]; i++)
-                    s.Append($",{bytes[i]}");
-                s.AppendLine($",{bytes[chunks[n + 1]]}");
-            }
-
-            lineNumber++;
-
-            if (x < 0)
-                x = 0;
-            else if (x > 511)
-                x = 511;
-
-            if (y < 0)
-                y = 0;
-            else if (y > 255)
-                y = 255;
-
-            s.AppendLine(x > 255
-                ? $"{lineNumber} poke{53248 + hwSpriteIndex * 2},{x - 256}:poke53264,peek(53264)or{turnOnFlagPosition[hwSpriteIndex]}:poke{53249 + hwSpriteIndex * 2},{y}"
-                : $"{lineNumber} poke{53248 + hwSpriteIndex * 2},{x}:poke53264,peek(53264)and{turnOffFlagPosition[hwSpriteIndex]}:poke{53249 + hwSpriteIndex * 2},{y}"
-            );
-
-
-            lineNumber++;
-            if (_sprite.MultiColor)
-                s.AppendLine($"{lineNumber} poke");
-            else
-                s.AppendLine($"{lineNumber} poke{53287 + hwSpriteIndex},{(int)_sprite.SpriteColorPalette[1]}");
-
-            lineNumber++;
-            s.AppendLine($"{lineNumber} poke53269,peek(53269)or{turnOnFlagPosition[hwSpriteIndex]}"); // Turn on sprite.
-            return s.ToString();
-        }
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int totalSpriteIndex, int hwSpriteIndex, int x, int y) =>
+            new CommodoreBasic20Generator(_sprite).GetBasicCode(lineNumber, spriteDataStartAddress, totalSpriteIndex, hwSpriteIndex, x, y);
     }
 }
