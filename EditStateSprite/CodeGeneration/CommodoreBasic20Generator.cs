@@ -49,13 +49,13 @@ namespace EditStateSprite.CodeGeneration
             
             var expandX = _sprite.ExpandX
                 ? $"{lineNumber} poke{Commodore64SpriteRegisters.HorizontalExpansion},peek({Commodore64SpriteRegisters.HorizontalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}:"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.HorizontalExpansion},peek({Commodore64SpriteRegisters.HorizontalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}";
+                : $"{lineNumber} poke{Commodore64SpriteRegisters.HorizontalExpansion},peek({Commodore64SpriteRegisters.HorizontalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}:";
             
             var expandY = _sprite.ExpandY
-                ? $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}:"
+                ? $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}"
                 : $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}";
             
-            s.AppendLine($"{expandX}{expandY}");
+            s.AppendLine($"{expandX}{expandY}--------");
 
             lineNumber++;
 

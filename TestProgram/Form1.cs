@@ -129,7 +129,7 @@ namespace TestProgram
 
         private void button10_Click(object sender, EventArgs e)
         {
-            _sprites.Load(@"D:\Temp\sprites.sprdef");
+            _sprites.Load(@"C:\Users\hbom\Desktop\sprites.sprdef");
             spriteEditorControl1.ConnectSprite(_sprites[0]);
             spriteEditorControl2.ConnectSprite(_sprites[1]);
             Invalidate();

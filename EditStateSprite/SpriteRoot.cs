@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using EditStateSprite.CodeGeneration;
 using EditStateSprite.Col;
+using EditStateSprite.Serialization;
 
 namespace EditStateSprite
 {
@@ -68,11 +69,11 @@ namespace EditStateSprite
             ExpandY = sprite.ExpandY;
         }
 
-        public static SpriteRoot Parse(List<string> lines)
+        public static SpriteRoot Parse(SpriteChunkParser chunk)
         {
-            var result = new SpriteRoot(lines.Any(x => x == "MULTICOLOR=YES"));
+            var result = new SpriteRoot(chunk.GetMulticolor());
 
-            foreach (var line in lines)
+            foreach (var line in chunk)
             {
                 if (line.StartsWith("NAME="))
                 {

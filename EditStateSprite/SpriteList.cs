@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
+using EditStateSprite.Serialization;
 
 namespace EditStateSprite
 {
@@ -153,7 +154,11 @@ namespace EditStateSprite
                     throw new SerializationException("Expected END FILE.");
 
                 foreach (var spriteData in spritesData)
-                    Add(SpriteRoot.Parse(spriteData));
+                {
+                    var chunk = new SpriteChunkParser();
+                    chunk.AddRange(spriteData);
+                    Add(SpriteRoot.Parse(chunk));
+                }
             }
             catch (Exception e)
             {
