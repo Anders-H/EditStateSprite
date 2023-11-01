@@ -6,10 +6,7 @@ namespace UnitTestProject
     [TestClass]
     public class SpriteList
     {
-        [TestMethod]
-        public void Deserialize()
-        {
-            const string data = @"BEGIN FILE (2023-10-24)
+        private const string Data = @"BEGIN FILE (2023-10-24)
 DOCUMENT TYPE=SPRIDEF2
 DOCUMENT VERSION=1.0
 BEGIN SPRITES (3)
@@ -107,22 +104,28 @@ END SPRITE (3/3)
 END SPRITES
 END FILE";
 
+        [TestMethod]
+        public void Deserialize()
+        {
             var spriteList = new EditStateSprite.SpriteList();
-            spriteList.Deserialize(data);
+            spriteList.Deserialize(Data);
 
             Assert.AreEqual(3, spriteList.Count);
 
             var s = spriteList[0];
 
             Assert.AreEqual(true, s.MultiColor);
+            Assert.AreEqual("Sprite 0 (multicolor)", s.Name);
 
             s = spriteList[1];
 
             Assert.AreEqual(false, s.MultiColor);
+            Assert.AreEqual("Sprite 1 (monochrome)", s.Name);
 
             s = spriteList[2];
 
             Assert.AreEqual(true, s.MultiColor);
+            Assert.AreEqual("Sprite 2 (multicolor)", s.Name);
         }
     }
 }

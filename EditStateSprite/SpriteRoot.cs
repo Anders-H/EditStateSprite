@@ -71,7 +71,10 @@ namespace EditStateSprite
 
         public static SpriteRoot Parse(SpriteChunkParser chunk)
         {
-            var result = new SpriteRoot(chunk.GetMulticolor());
+            var result = new SpriteRoot(chunk.GetMulticolor())
+            {
+                Name = chunk.GetName()
+            };
 
             foreach (var line in chunk)
             {

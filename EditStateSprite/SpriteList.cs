@@ -81,7 +81,7 @@ namespace EditStateSprite
                 );
 
                 for (var i = 0; i < lines.Length; i++)
-                    lines[i] = lines[i].Trim().ToUpper();
+                    lines[i] = lines[i].Trim();
 
                 var index = 0;
 

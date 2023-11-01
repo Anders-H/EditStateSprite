@@ -12,7 +12,27 @@ namespace EditStateSprite.Serialization
             const string multiColorRegex = @"^[\s]*multicolor[\s]*=[\s]*(yes|no)?[\s]*$";
             const string isSetRegex = @"^[\s]*multicolor[\s]*=[\s]*(yes)?[\s]*$";
             var multicolor = Pop(multiColorRegex);
+
+            if (string.IsNullOrEmpty(multicolor))
+                throw new SystemException("Serialized sprite did not contain multicolor information.");
+
             return Is(isSetRegex, multicolor);
+        }
+
+        public string GetName()
+        {
+            const string nameRegex = @"^[\s]*name[\s]*=[\s]*(.*)[\s]*$";
+            var name = Pop(nameRegex);
+
+            if (string.IsNullOrEmpty(name))
+                throw new SystemException("Serialized sprite did not contain any name information.");
+
+            var match = Regex.Match(name, nameRegex, RegexOptions.IgnoreCase);
+
+            if (match.Success)
+                return match.Groups[1].Value.Trim();
+            
+            throw new SystemException("Serialized sprite did not contain any correct name information.");
         }
 
         private string Pop(string regex)
@@ -25,7 +45,7 @@ namespace EditStateSprite.Serialization
                 return s;
             }
 
-            throw new SystemException("Serialized sprite did not contain multicolor information.");
+            return null;
         }
 
         private static bool Is(string regex, string value)
