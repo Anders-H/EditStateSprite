@@ -12,28 +12,31 @@ namespace EditStateSprite.CodeGeneration
             _sprite = sprite;
         }
 
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int totalSpriteIndex, int hwSpriteIndex, int x, int y)
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y)
         {
+            lineNumber += 11 * includeInExportIndex;
+
             if (lineNumber < 0 || lineNumber > 63999 - 10)
                 throw new ArgumentOutOfRangeException(nameof(lineNumber));
 
             if (hwSpriteIndex < 0 || hwSpriteIndex > 7)
                 throw new ArgumentOutOfRangeException(nameof(hwSpriteIndex));
 
-            var startAddress = spriteDataStartAddress / 64 + totalSpriteIndex;
-
+            spriteDataStartAddress += (includeInExportIndex * 64);
+            var startAddress = spriteDataStartAddress / 64;
             var turnOnFlagPosition = new[] { 1, 2, 4, 8, 16, 32, 64, 128 };
             var turnOffFlagPosition = new[] { 254, 253, 251, 247, 239, 223, 191, 127 };
 
             var s = new StringBuilder();
 
-            s.AppendLine($"{lineNumber} poke{Commodore64SpriteRegisters.BackgroundColorRegister},{(int)_sprite.SpriteColorPalette[0]}:poke{Commodore64SpriteRegisters.ImageLocationPointers + hwSpriteIndex},{startAddress + totalSpriteIndex}:m={Commodore64SpriteRegisters.MulticolorFlags}:o={Commodore64SpriteRegisters.EnableFlags}");
+            s.AppendLine($@"{lineNumber++} rem""sprite {includeInExportIndex}");
+            s.AppendLine(includeInExportIndex == 0
+                ? $"{lineNumber} poke{Commodore64SpriteRegisters.BackgroundColorRegister},{(int)_sprite.SpriteColorPalette[0]}:poke{Commodore64SpriteRegisters.ImageLocationPointers},{startAddress}:m={Commodore64SpriteRegisters.MulticolorFlags}:o={Commodore64SpriteRegisters.EnableFlags}"
+                : $"{lineNumber} poke{Commodore64SpriteRegisters.ImageLocationPointers + includeInExportIndex},{startAddress}");
 
             lineNumber++;
             s.AppendLine($"{lineNumber} fora={spriteDataStartAddress}to{spriteDataStartAddress + 62}:readb:pokea,b:next");
-
             var bytes = _sprite.GetBytes();
-
             var chunks = new[] { 0, 11, 12, 23, 24, 35, 36, 48, 49, 62 };
 
             for (var n = 0; n < 10; n += 2)
@@ -55,7 +58,7 @@ namespace EditStateSprite.CodeGeneration
                 ? $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}"
                 : $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}";
             
-            s.AppendLine($"{expandX}{expandY}--------");
+            s.AppendLine($"{expandX}{expandY}");
 
             lineNumber++;
 

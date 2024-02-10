@@ -167,7 +167,8 @@ namespace TestProgram
 
         private void button15_Click(object sender, EventArgs e)
         {
-            var code = spriteEditorControl1.GetBasicCode(10, 8192, 0, 5, 110, 110);
+            var code = spriteEditorControl1.GetBasicCode(10, 8192, 0, 0, 110, 110);
+            code += spriteEditorControl1.GetBasicCode(10, 8192, 1, 1, 120, 120);
             Clipboard.SetText(code);
             MessageBox.Show(code);
         }

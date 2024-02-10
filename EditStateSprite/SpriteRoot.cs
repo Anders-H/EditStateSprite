@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -321,12 +320,12 @@ namespace EditStateSprite
         /// </summary>
         /// <param name="lineNumber">BASIC line number (0 - 63999)</param>
         /// <param name="spriteDataStartAddress"></param>
-        /// <param name="totalSpriteIndex"></param>
+        /// <param name="includeInExportIndex">The index of the sprite in the list of sprites being exported</param>
         /// <param name="hwSpriteIndex">Hardware sprite (0 - 7)</param>
         /// <param name="x">C64 horizontal screen location</param>
         /// <param name="y">C64 vertical screen location</param>
         /// <returns>Commodore BASIC 2.0 second release source code.</returns>
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int totalSpriteIndex, int hwSpriteIndex, int x, int y) =>
-            new CommodoreBasic20Generator(this).GetBasicCode(lineNumber, spriteDataStartAddress, totalSpriteIndex, hwSpriteIndex, x, y);
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y) =>
+            new CommodoreBasic20Generator(this).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, hwSpriteIndex, x, y);
     }
 }
