@@ -1,4 +1,4 @@
-﻿namespace EditStateSprite.CodeGeneration
+﻿namespace EditStateSprite.CodeGeneration.Basic20
 {
     public class Commodore64SpriteRegisters
     {

@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using EditStateSprite.CodeGeneration;
+using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Col;
 using EditStateSprite.Serialization;
 

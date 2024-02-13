@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGeneration\Commodore64SpriteRegisters.cs" />
-    <Compile Include="CodeGeneration\CommodoreBasic20Generator.cs" />
+    <Compile Include="CodeGeneration\Basic20\Commodore64SpriteRegisters.cs" />
+    <Compile Include="CodeGeneration\Basic20\CommodoreBasic20Generator.cs" />
     <Compile Include="ColorDropDown.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,6 +85,5 @@
       <DependentUpon>FourColorPaletteColorPicker.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

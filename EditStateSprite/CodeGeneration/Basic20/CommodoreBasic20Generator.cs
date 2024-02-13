@@ -1,11 +1,12 @@
-﻿using System.Text;
-using System;
+﻿using System;
+using System.Text;
 
-namespace EditStateSprite.CodeGeneration
+namespace EditStateSprite.CodeGeneration.Basic20
 {
     public class CommodoreBasic20Generator
     {
         private readonly SpriteRoot _sprite;
+        public const int LineNumbersNeeded = 11;
 
         public CommodoreBasic20Generator(SpriteRoot sprite)
         {
@@ -14,13 +15,23 @@ namespace EditStateSprite.CodeGeneration
 
         public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y)
         {
-            lineNumber += 11 * includeInExportIndex;
+            lineNumber += LineNumbersNeeded * includeInExportIndex;
 
-            if (lineNumber < 0 || lineNumber > 63999 - 10)
+            if (lineNumber < 0 || lineNumber > 63999 - (LineNumbersNeeded - 1))
                 throw new ArgumentOutOfRangeException(nameof(lineNumber));
 
             if (hwSpriteIndex < 0 || hwSpriteIndex > 7)
                 throw new ArgumentOutOfRangeException(nameof(hwSpriteIndex));
+
+            if (x < 0)
+                x = 0;
+            else if (x > 511)
+                x = 511;
+
+            if (y < 0)
+                y = 0;
+            else if (y > 255)
+                y = 255;
 
             spriteDataStartAddress += (includeInExportIndex * 64);
             var startAddress = spriteDataStartAddress / 64;
@@ -31,8 +42,8 @@ namespace EditStateSprite.CodeGeneration
 
             s.AppendLine($@"{lineNumber++} rem""sprite {includeInExportIndex}");
             s.AppendLine(includeInExportIndex == 0
-                ? $"{lineNumber} poke{Commodore64SpriteRegisters.BackgroundColorRegister},{(int)_sprite.SpriteColorPalette[0]}:poke{Commodore64SpriteRegisters.ImageLocationPointers},{startAddress}:m={Commodore64SpriteRegisters.MulticolorFlags}:o={Commodore64SpriteRegisters.EnableFlags}"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.ImageLocationPointers + includeInExportIndex},{startAddress}");
+                ? $"{lineNumber} poke{Commodore64SpriteRegisters.BackgroundColorRegister},{(int)_sprite.SpriteColorPalette[0]}:poke{Commodore64SpriteRegisters.ImageLocationPointers},{startAddress}:x={x}:y={y}:m={Commodore64SpriteRegisters.MulticolorFlags}:o={Commodore64SpriteRegisters.EnableFlags}"
+                : $"{lineNumber} poke{Commodore64SpriteRegisters.ImageLocationPointers + includeInExportIndex},{startAddress}:x={x}:y={y}:");
 
             lineNumber++;
             s.AppendLine($"{lineNumber} fora={spriteDataStartAddress}to{spriteDataStartAddress + 62}:readb:pokea,b:next");
@@ -62,21 +73,11 @@ namespace EditStateSprite.CodeGeneration
 
             lineNumber++;
 
-            if (x < 0)
-                x = 0;
-            else if (x > 511)
-                x = 511;
-
-            if (y < 0)
-                y = 0;
-            else if (y > 255)
-                y = 255;
-
             var xm = Commodore64SpriteRegisters.SpritePositionXPositionMostSignificantBit;
 
             s.AppendLine(x > 255
-                ? $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},{x - 256}:poke{xm},peek({xm})or{turnOnFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},{y}"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},{x}:poke{xm},peek({xm})and{turnOffFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},{y}"
+                ? $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},x-256:poke{xm},peek({xm})or{turnOnFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},y"
+                : $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},x:poke{xm},peek({xm})and{turnOffFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},y"
             );
 
             lineNumber++;

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Windows.Forms;
-using EditStateSprite.CodeGeneration;
+using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Dialogs;
 
 namespace EditStateSprite
