@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace EditStateSprite
 {
@@ -121,5 +124,23 @@ namespace EditStateSprite
             PaintPreview(g, Parent.PreviewOffsetX, Parent.PreviewOffsetY);
 
         public abstract byte[] GetBytes();
+
+        public byte[] GetBytes64()
+        {
+            var bytes = GetBytes().ToList();
+            bytes.Add(0);
+            return bytes.ToArray();
+        }
+
+        public byte[] GetBytes64WithStartAddress(ushort startAddress)
+        {
+            var bytes = new List<byte>();
+            var adr = BitConverter.GetBytes(startAddress).ToList();
+            bytes.Add(adr[0]);
+            bytes.Add(adr[1]);
+            bytes.AddRange(GetBytes().ToList());
+            bytes.Add(0);
+            return bytes.ToArray();
+        }
     }
 }

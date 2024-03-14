@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using EditStateSprite;
@@ -171,6 +173,14 @@ namespace TestProgram
             code += spriteEditorControl2.GetBasicCode(10, 8192, 1, 1, 120, 120);
             Clipboard.SetText(code);
             MessageBox.Show(code);
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            var bytes = new List<byte>();
+            bytes.AddRange(spriteEditorControl1.GetBytes64WithStartAddress(3584));
+            bytes.AddRange(spriteEditorControl2.GetBytes64());
+            File.WriteAllBytes(@"D:\Temp\test.prg", bytes.ToArray());
         }
     }
 }

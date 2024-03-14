@@ -225,6 +225,12 @@ namespace EditStateSprite
         public byte[] GetBytes() =>
             _sprite.GetBytes();
 
+        public byte[] GetBytes64() =>
+            _sprite.GetBytes64();
+
+        public byte[] GetBytes64WithStartAddress(ushort startAddress) =>
+            _sprite.GetBytes64WithStartAddress(startAddress);
+
         /// <summary>
         /// Generates Commodore 64 BASIC code for displaying a sprite.
         /// </summary>

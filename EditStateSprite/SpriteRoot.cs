@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using EditStateSprite.CodeGeneration;
 using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Col;
 using EditStateSprite.Serialization;
@@ -315,6 +314,12 @@ namespace EditStateSprite
 
         public byte[] GetBytes() =>
             ColorMap.GetBytes();
+
+        public byte[] GetBytes64() =>
+            ColorMap.GetBytes64();
+
+        public byte[] GetBytes64WithStartAddress(ushort startAddress) =>
+            ColorMap.GetBytes64WithStartAddress(startAddress);
 
         /// <summary>
         /// Generates Commodore 64 BASIC code for displaying a sprite.

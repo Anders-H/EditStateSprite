@@ -94,7 +94,7 @@ namespace EditStateSprite
 
                 try
                 {
-                    var _ = new DateTime(int.Parse(saveDateString[0]), int.Parse(saveDateString[1]), int.Parse(saveDateString[2]));
+                    _ = new DateTime(int.Parse(saveDateString[0]), int.Parse(saveDateString[1]), int.Parse(saveDateString[2]));
                 }
                 catch
                 {
@@ -165,5 +165,8 @@ namespace EditStateSprite
                 throw new SerializationException($"This file contain errors: {e.Message}");
             }
         }
+
+        public List<SpriteRoot> GetAll() =>
+            this.ToList();
     }
 }
