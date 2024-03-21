@@ -241,7 +241,7 @@ namespace EditStateSprite
         /// <param name="x">C64 horizontal screen location</param>
         /// <param name="y">C64 vertical screen location</param>
         /// <returns>Commodore BASIC 2.0 second release source code.</returns>
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y) =>
-            new CommodoreBasic20Generator(_sprite).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, hwSpriteIndex, x, y);
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int x, int y) =>
+            new CommodoreBasic20Generator(_sprite).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, x, y);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Text.RegularExpressions;
 using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Col;
 using EditStateSprite.Serialization;
@@ -68,84 +66,9 @@ namespace EditStateSprite
             ExpandY = sprite.ExpandY;
         }
 
-        public static SpriteRoot Parse(SpriteChunkParser chunk)
-        {
-            var result = new SpriteRoot(chunk.GetMulticolor())
-            {
-                Name = chunk.GetName()
-            };
-
-            foreach (var line in chunk)
-            {
-                if (line.StartsWith("NAME="))
-                {
-                    result.Name = line.Substring(5).Trim();
-                }
-                else if (line.StartsWith("PREVIEW OFFSET="))
-                {
-                    var offset = line.Split('=')[1];
-                    var offsetParts = offset.Split(',');
-                    result.PreviewOffsetX = int.Parse(offsetParts[0]);
-                    result.PreviewOffsetY = int.Parse(offsetParts[1]);
-                }
-                else if (line.StartsWith("EXPAND="))
-                {
-                    var expand = line.Split('=')[1];
-                    switch (expand)
-                    {
-                        case "XY":
-                            result.ExpandX = true;
-                            result.ExpandY = true;
-                            break;
-                        case "X":
-                            result.ExpandX = true;
-                            result.ExpandY = false;
-                            break;
-                        case "Y":
-                            result.ExpandX = false;
-                            result.ExpandY = true;
-                            break;
-                        default:
-                            result.ExpandX = false;
-                            result.ExpandY = false;
-                            break;
-                    }
-                }
-                else if (line == "PREVIEW ZOOM=YES")
-                {
-                    result.PreviewZoom = true;
-                }
-                else if (line == "PREVIEW ZOOM=NO")
-                {
-                    result.PreviewZoom = false;
-                }
-                else if (line.StartsWith("PREVIEW ZOOM="))
-                {
-                    throw new SerializationException("Unknown value for PREVIEW ZOOM.");
-                }
-                else if (line.StartsWith("COLOR PALETTE="))
-                {
-                    ParseSpriteColorPalette(line.Split('=')[1], ref result);
-                }
-                else if (line.StartsWith("SPRITE ROW DATA ("))
-                {
-                    var colorRowMatch = Regex.Match(line, @"^SPRITE ROW DATA \(([0-9]+)\/21\)=[0-3]+$");
-
-                    if (!colorRowMatch.Success)
-                        throw new SerializationException("Invalid SPRITE ROW DATA");
-
-                    var rowIndex = int.Parse(colorRowMatch.Groups[1].Value) - 1;
-
-                    var pixelString = line.Split('=')[1];
-
-                    for (var i = 0; i < result.ColorMap.Width; i++)
-                        result.SetPixel(i, rowIndex, int.Parse(pixelString.Substring(i, 1)));
-                }
-            }
-
-            return result;
-        }
-
+        public static SpriteRoot Parse(SpriteChunkParser chunk) =>
+            new SpriteRootParser(chunk).Parse();
+    
         private ColorName[] GetSpriteColorPalette()
         {
             var result = MultiColor ? new ColorName[4] : new ColorName[2];
@@ -154,34 +77,6 @@ namespace EditStateSprite
                 result[i] = SpriteColorPalette[i];
 
             return result;
-        }
-
-        private static void ParseSpriteColorPalette(string colorsSource, ref SpriteRoot sprite)
-        {
-            var colorsRaw = colorsSource.Split('-');
-
-            if (sprite.MultiColor)
-            {
-                if (colorsRaw.Length != 4)
-                    throw new SerializationException("Multicolor sprites should have four colors.");
-
-                sprite.SpriteColorPalette = new ColorName[4];
-            }
-            else
-            {
-                if (colorsRaw.Length != 2)
-                    throw new SerializationException("Monochrome sprites should have two colors.");
-
-                sprite.SpriteColorPalette = new ColorName[2];
-            }
-
-            for (var i = 0; i < colorsRaw.Length; i++)
-            {
-                if (Enum.TryParse<ColorName>(colorsRaw[i], true, out var colorName))
-                    sprite.SpriteColorPalette[i] = colorName;
-                else
-                    throw new SerializationException($"Unknown color name: {colorsRaw[i]}");
-            }
         }
 
         public void SetPixel(int x, int y, int colorIndex)
@@ -327,11 +222,10 @@ namespace EditStateSprite
         /// <param name="lineNumber">BASIC line number (0 - 63999)</param>
         /// <param name="spriteDataStartAddress"></param>
         /// <param name="includeInExportIndex">The index of the sprite in the list of sprites being exported</param>
-        /// <param name="hwSpriteIndex">Hardware sprite (0 - 7)</param>
         /// <param name="x">C64 horizontal screen location</param>
         /// <param name="y">C64 vertical screen location</param>
         /// <returns>Commodore BASIC 2.0 second release source code.</returns>
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y) =>
-            new CommodoreBasic20Generator(this).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, hwSpriteIndex, x, y);
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int x, int y) =>
+            new CommodoreBasic20Generator(this).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, x, y);
     }
 }

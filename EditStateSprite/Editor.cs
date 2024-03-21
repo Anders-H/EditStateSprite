@@ -7,12 +7,10 @@ namespace EditStateSprite
 {
     public class Editor
     {
-        private int _cursorX;
-        private int _cursorY;
+        private Point _cursor;
         internal static Renderer Renderer { get; }
         internal static IResources Resources { get; }
-        public int EditorButtonWidth { get; set; }
-        public int EditorButtonHeight { get; set; }
+        public Size EditorButtonSize { get; set; }
         public ColorButton[,] EditorColorButtonMatrix { get; private set; }
         public SpriteRoot CurrentSprite { get; private set; }
 
@@ -29,7 +27,7 @@ namespace EditStateSprite
         }
 
         public Point GetCursorPosition() =>
-            new Point(_cursorX, _cursorY);
+            new Point(_cursor.X, _cursor.Y);
 
         public void SetCursorPosition(Point position)
         {
@@ -38,54 +36,54 @@ namespace EditStateSprite
             if (y >= EditorColorButtonMatrix.GetLength(0))
                 y = EditorColorButtonMatrix.GetLength(0) - 1;
 
-            _cursorX = position.X;
-            _cursorY = y;
+            _cursor.X = position.X;
+            _cursor.Y = y;
         }
 
         public void ResetCursorPosition()
         {
-            _cursorX = 0;
-            _cursorY = 0;
+            _cursor.X = 0;
+            _cursor.Y = 0;
         }
 
         public void SetPixel(int editorX, int editorY, int colorIndex)
         {
-            var pixelX = editorX / EditorButtonWidth;
-            var pixelY = editorY / EditorButtonHeight;
+            var pixelX = editorX / EditorButtonSize.Width;
+            var pixelY = editorY / EditorButtonSize.Height;
 
             if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
                 return;
 
-            _cursorX = pixelX;
-            _cursorY = pixelY;
+            _cursor.X = pixelX;
+            _cursor.Y = pixelY;
             EditorColorButtonMatrix[pixelX, pixelY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
             CurrentSprite.SetPixel(pixelX, pixelY, colorIndex);
         }
 
         public void SetPixelAtCursor(int colorIndex)
         {
-            if (_cursorX < 0 || _cursorX > CurrentSprite.ColorMap.Width || _cursorY < 0 || _cursorY > CurrentSprite.ColorMap.Height)
+            if (_cursor.X < 0 || _cursor.X > CurrentSprite.ColorMap.Width || _cursor.Y < 0 || _cursor.Y > CurrentSprite.ColorMap.Height)
                 return;
 
-            EditorColorButtonMatrix[_cursorX, _cursorY].Color = CurrentSprite.SpriteColorPalette[colorIndex];
-            CurrentSprite.SetPixel(_cursorX, _cursorY, colorIndex);
+            EditorColorButtonMatrix[_cursor.X, _cursor.Y].Color = CurrentSprite.SpriteColorPalette[colorIndex];
+            CurrentSprite.SetPixel(_cursor.X, _cursor.Y, colorIndex);
         }
 
         public void MoveCursor(int x, int y)
         {
-            _cursorX += x;
+            _cursor.X += x;
 
-            if (_cursorX < 0)
-                _cursorX = CurrentSprite.ColorMap.Width - 1;
-            else if (_cursorX >= CurrentSprite.ColorMap.Width)
-                _cursorX = 0;
+            if (_cursor.X < 0)
+                _cursor.X = CurrentSprite.ColorMap.Width - 1;
+            else if (_cursor.X >= CurrentSprite.ColorMap.Width)
+                _cursor.X = 0;
 
-            _cursorY += y;
+            _cursor.Y += y;
 
-            if (_cursorY < 0)
-                _cursorY = CurrentSprite.ColorMap.Height - 1;
-            else if (_cursorY >= CurrentSprite.ColorMap.Height)
-                _cursorY = 0;
+            if (_cursor.Y < 0)
+                _cursor.Y = CurrentSprite.ColorMap.Height - 1;
+            else if (_cursor.Y >= CurrentSprite.ColorMap.Height)
+                _cursor.Y = 0;
         }
 
         public void Clear()
@@ -147,39 +145,37 @@ namespace EditStateSprite
 
         public void ChangeCurrentSprite(SpriteRoot currentSprite)
         {
-            _cursorX = 0;
-            _cursorY = 0;
+            _cursor.X = 0;
+            _cursor.Y = 0;
 
             CurrentSprite = currentSprite;
 
             if (CurrentSprite.MultiColor)
             {
                 EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-                EditorButtonWidth = 30;
-                EditorButtonHeight = 15;
+                EditorButtonSize = new Size(30, 15);
             }
             else
             {
                 EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-                EditorButtonWidth = 15;
-                EditorButtonHeight = 15;
+                EditorButtonSize = new Size(15, 15);
             }
 
             var x = 0;
             var y = 0;
-            var pw = EditorButtonWidth - 1;
-            var ph = EditorButtonHeight - 1;
+            var pw = EditorButtonSize.Width - 1;
+            var ph = EditorButtonSize.Height - 1;
 
             for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
             {
                 for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
                 {
                     EditorColorButtonMatrix[w, h] = new ColorButton(Renderer, new Rectangle(x, y, pw, ph), CurrentSprite.ColorMap.GetColorNameFromPosition(w, h));
-                    x += EditorButtonWidth;
+                    x += EditorButtonSize.Width;
                 }
 
                 x = 0;
-                y += EditorButtonHeight;
+                y += EditorButtonSize.Height;
             }
         }
 
@@ -189,7 +185,7 @@ namespace EditStateSprite
             {
                 for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
                 {
-                    if (hasFocus && w == _cursorX && h == _cursorY)
+                    if (hasFocus && w == _cursor.X && h == _cursor.Y)
                         Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
                     else
                         Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);

@@ -13,15 +13,24 @@ namespace EditStateSprite.CodeGeneration.Basic20
             _sprite = sprite;
         }
 
-        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int hwSpriteIndex, int x, int y)
+        public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int x, int y)
         {
-            lineNumber += LineNumbersNeeded * includeInExportIndex;
+            var r = includeInExportIndex;
+            var bc = Commodore64SpriteRegisters.BackgroundColorRegister;
+            var il = Commodore64SpriteRegisters.ImageLocationPointers;
+            var mc = Commodore64SpriteRegisters.MulticolorFlags;
+            var ef = Commodore64SpriteRegisters.EnableFlags;
+            var he = Commodore64SpriteRegisters.HorizontalExpansion;
+            var ve = Commodore64SpriteRegisters.VerticalExpansion;
+            var sp = Commodore64SpriteRegisters.SpritePositionRegisters;
+            var fc = Commodore64SpriteRegisters.ForeColorRegisters;
+            lineNumber += LineNumbersNeeded * r;
 
             if (lineNumber < 0 || lineNumber > 63999 - (LineNumbersNeeded - 1))
                 throw new ArgumentOutOfRangeException(nameof(lineNumber));
 
-            if (hwSpriteIndex < 0 || hwSpriteIndex > 7)
-                throw new ArgumentOutOfRangeException(nameof(hwSpriteIndex));
+            if (r < 0 || r > 7)
+                throw new ArgumentOutOfRangeException(nameof(r));
 
             if (x < 0)
                 x = 0;
@@ -33,17 +42,17 @@ namespace EditStateSprite.CodeGeneration.Basic20
             else if (y > 255)
                 y = 255;
 
-            spriteDataStartAddress += (includeInExportIndex * 64);
+            spriteDataStartAddress += (r * 64);
             var startAddress = spriteDataStartAddress / 64;
             var turnOnFlagPosition = new[] { 1, 2, 4, 8, 16, 32, 64, 128 };
             var turnOffFlagPosition = new[] { 254, 253, 251, 247, 239, 223, 191, 127 };
 
             var s = new StringBuilder();
 
-            s.AppendLine($@"{lineNumber++} rem""sprite {includeInExportIndex}");
-            s.AppendLine(includeInExportIndex == 0
-                ? $"{lineNumber} poke{Commodore64SpriteRegisters.BackgroundColorRegister},{(int)_sprite.SpriteColorPalette[0]}:poke{Commodore64SpriteRegisters.ImageLocationPointers},{startAddress}:x={x}:y={y}:m={Commodore64SpriteRegisters.MulticolorFlags}:o={Commodore64SpriteRegisters.EnableFlags}"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.ImageLocationPointers + includeInExportIndex},{startAddress}:x={x}:y={y}:");
+            s.AppendLine($@"{lineNumber++} rem""sprite {r}");
+            s.AppendLine(r == 0
+                ? $"{lineNumber} poke{bc},{(int)_sprite.SpriteColorPalette[0]}:poke{il},{startAddress}:x={x}:y={y}:m={mc}:o={ef}"
+                : $"{lineNumber} poke{il + r},{startAddress}:x={x}:y={y}:");
 
             lineNumber++;
             s.AppendLine($"{lineNumber} fora={spriteDataStartAddress}to{spriteDataStartAddress + 62}:readb:pokea,b:next");
@@ -62,12 +71,12 @@ namespace EditStateSprite.CodeGeneration.Basic20
             lineNumber++;
             
             var expandX = _sprite.ExpandX
-                ? $"{lineNumber} poke{Commodore64SpriteRegisters.HorizontalExpansion},peek({Commodore64SpriteRegisters.HorizontalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}:"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.HorizontalExpansion},peek({Commodore64SpriteRegisters.HorizontalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}:";
+                ? $"{lineNumber} poke{he},peek({he})or{turnOnFlagPosition[r]}:"
+                : $"{lineNumber} poke{he},peek({he})and{turnOffFlagPosition[r]}:";
             
             var expandY = _sprite.ExpandY
-                ? $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})or{turnOnFlagPosition[hwSpriteIndex]}"
-                : $"poke{Commodore64SpriteRegisters.VerticalExpansion},peek({Commodore64SpriteRegisters.VerticalExpansion})and{turnOffFlagPosition[hwSpriteIndex]}";
+                ? $"poke{ve},peek({ve})or{turnOnFlagPosition[r]}"
+                : $"poke{ve},peek({ve})and{turnOffFlagPosition[r]}";
             
             s.AppendLine($"{expandX}{expandY}");
 
@@ -76,21 +85,27 @@ namespace EditStateSprite.CodeGeneration.Basic20
             var xm = Commodore64SpriteRegisters.SpritePositionXPositionMostSignificantBit;
 
             s.AppendLine(x > 255
-                ? $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},x-256:poke{xm},peek({xm})or{turnOnFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},y"
-                : $"{lineNumber} poke{Commodore64SpriteRegisters.SpritePositionRegisters + hwSpriteIndex * 2},x:poke{xm},peek({xm})and{turnOffFlagPosition[hwSpriteIndex]}:poke{Commodore64SpriteRegisters.SpritePositionRegisters + 1 + hwSpriteIndex * 2},y"
+                ? $"{lineNumber} poke{sp + r * 2},x-256:poke{xm},peek({xm})or{turnOnFlagPosition[r]}:poke{sp + 1 + r * 2},y"
+                : $"{lineNumber} poke{sp + r * 2},x:poke{xm},peek({xm})and{turnOffFlagPosition[r]}:poke{sp + 1 + r * 2},y"
             );
 
             lineNumber++;
-            var turnOn = $"pokeo,peek(o)or{turnOnFlagPosition[hwSpriteIndex]}";
+            var turnOn = $"pokeo,peek(o)or{turnOnFlagPosition[r]}";
+            var p1 = (int)_sprite.SpriteColorPalette[1];
+
             if (_sprite.MultiColor)
             {
-                s.Append($"{lineNumber} pokem,peek(m)or{turnOnFlagPosition[hwSpriteIndex]}:");
-                s.AppendLine($"poke{Commodore64SpriteRegisters.ForeColorRegisters + hwSpriteIndex},{(int)_sprite.SpriteColorPalette[1]}:poke{Commodore64SpriteRegisters.ExtraColorOne},{(int)_sprite.SpriteColorPalette[2]}:poke{Commodore64SpriteRegisters.ExtraColorTwo},{(int)_sprite.SpriteColorPalette[3]}:{turnOn}");
+                var x1 = Commodore64SpriteRegisters.ExtraColorOne;
+                var x2 = Commodore64SpriteRegisters.ExtraColorTwo;
+                var p2 = (int)_sprite.SpriteColorPalette[2];
+                var p3 = (int)_sprite.SpriteColorPalette[3];
+                s.Append($"{lineNumber} pokem,peek(m)or{turnOnFlagPosition[r]}:");
+                s.AppendLine($"poke{fc + r},{p1}:poke{x1},{p2}:poke{x2},{p3}:{turnOn}");
             }
             else
             {
-                s.Append($"{lineNumber} pokem,peek(m)and{turnOffFlagPosition[hwSpriteIndex]}:");
-                s.AppendLine($"poke{Commodore64SpriteRegisters.ForeColorRegisters + hwSpriteIndex},{(int)_sprite.SpriteColorPalette[1]}:{turnOn}");
+                s.Append($"{lineNumber} pokem,peek(m)and{turnOffFlagPosition[r]}:");
+                s.AppendLine($"poke{fc + r},{p1}:{turnOn}");
             }
 
             return s.ToString();

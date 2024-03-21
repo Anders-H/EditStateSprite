@@ -66,6 +66,7 @@
     <Compile Include="MonochromeSpriteColorMap.cs" />
     <Compile Include="MultiColorSpriteColorMap.cs" />
     <Compile Include="Serialization\SpriteChunkParser.cs" />
+    <Compile Include="Serialization\SpriteRootListDeserializer.cs" />
     <Compile Include="SpriteChangedDelegate.cs" />
     <Compile Include="SpriteChangedEventArgs.cs" />
     <Compile Include="SpriteColorMapBase.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="SpriteModifiers\SpriteScrollModifier.cs" />
     <Compile Include="SpriteRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\SpriteRootParser.cs" />
     <Compile Include="TwoWayDirection.cs" />
   </ItemGroup>
   <ItemGroup>
