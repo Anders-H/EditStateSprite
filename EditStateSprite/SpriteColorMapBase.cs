@@ -12,12 +12,18 @@ namespace EditStateSprite
         public abstract int Width { get; }
         public int Height => 21;
         public abstract int ColorCount { get; }
-        
-        protected SpriteColorMapBase(SpriteRoot parent)
+        public bool PaintBackground { get; set; }
+
+        protected SpriteColorMapBase(SpriteRoot parent) : this(parent, false)
+        {
+        }
+
+        protected SpriteColorMapBase(SpriteRoot parent, bool paintBackground)
         {
             Parent = parent;
             // ReSharper disable once VirtualMemberCallInConstructor
             Colors = new int[Width, Height];
+            PaintBackground = paintBackground;
         }
 
         public int GetColorIndex(int x, int y) =>
@@ -29,8 +35,18 @@ namespace EditStateSprite
         public ColorName GetColorNameFromPosition(int x, int y) =>
             Parent.SpriteColorPalette[Colors[x, y]];
 
+        public ColorName GetColorNameFromPosition(int x, int y, out bool isBackground)
+        {
+            var c = Colors[x, y];
+            isBackground = c == 0;
+            return Parent.SpriteColorPalette[Colors[x, y]];
+        }
+
         public Color GetColorFromPosition(int x, int y) =>
             SpriteRoot.C64Palette.GetColor(GetColorNameFromPosition(x, y));
+
+        public Color GetColorFromPosition(int x, int y, out bool isBackground) =>
+            SpriteRoot.C64Palette.GetColor(GetColorNameFromPosition(x, y, out isBackground));
 
         public abstract string SerializeSpriteData(int y);
 
@@ -50,7 +66,11 @@ namespace EditStateSprite
                     {
                         for (var indexX = 0; indexX < Width; indexX++)
                         {
-                            b.SetPixel(x, y, GetColorFromPosition(indexX, indexY));
+                            var c = GetColorFromPosition(indexX, indexY, out var isBackground);
+                            
+                            if (!isBackground || PaintBackground)
+                                b.SetPixel(x, y, c);
+                            
                             x += pixelWidth;
                         }
 
@@ -64,9 +84,14 @@ namespace EditStateSprite
                     {
                         for (var indexX = 0; indexX < Width; indexX++)
                         {
-                            for (var pixelHeightIndex = 0; pixelHeightIndex < pixelHeight; pixelHeightIndex++)
+                            var c = GetColorFromPosition(indexX, indexY, out var isBackground);
+
+                            if (!isBackground || PaintBackground)
                             {
-                                b.SetPixel(x, y + pixelHeightIndex, GetColorFromPosition(indexX, indexY));
+                                for (var pixelHeightIndex = 0; pixelHeightIndex < pixelHeight; pixelHeightIndex++)
+                                {
+                                    b.SetPixel(x, y + pixelHeightIndex, c);
+                                }
                             }
 
                             x += pixelWidth;
@@ -82,9 +107,14 @@ namespace EditStateSprite
                     {
                         for (var indexX = 0; indexX < Width; indexX++)
                         {
-                            for (var pixelWidthIndex = 0; pixelWidthIndex < pixelWidth; pixelWidthIndex++)
+                            var c = GetColorFromPosition(indexX, indexY, out var isBackground);
+
+                            if (!isBackground || PaintBackground)
                             {
-                                b.SetPixel(x + pixelWidthIndex, y, GetColorFromPosition(indexX, indexY));
+                                for (var pixelWidthIndex = 0; pixelWidthIndex < pixelWidth; pixelWidthIndex++)
+                                {
+                                    b.SetPixel(x + pixelWidthIndex, y, c);
+                                }
                             }
 
                             x += pixelWidth;
@@ -102,9 +132,14 @@ namespace EditStateSprite
                         {
                             for (var pixelHeightIndex = 0; pixelHeightIndex < pixelHeight; pixelHeightIndex++)
                             {
-                                for (var pixelWidthIndex = 0; pixelWidthIndex < pixelWidth; pixelWidthIndex++)
+                                var c = GetColorFromPosition(indexX, indexY, out var isBackground);
+
+                                if (!isBackground || PaintBackground)
                                 {
-                                    b.SetPixel(x + pixelWidthIndex, y + pixelHeightIndex, GetColorFromPosition(indexX, indexY));
+                                    for (var pixelWidthIndex = 0; pixelWidthIndex < pixelWidth; pixelWidthIndex++)
+                                    {
+                                        b.SetPixel(x + pixelWidthIndex, y + pixelHeightIndex, c);
+                                    }
                                 }
                             }
 
