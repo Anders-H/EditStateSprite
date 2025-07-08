@@ -1,8 +1,7 @@
-﻿namespace EditStateSprite
+﻿namespace EditStateSprite;
+
+public enum TwoWayDirection
 {
-    public enum TwoWayDirection
-    {
-        LeftRight,
-        TopDown
-    }
+    LeftRight,
+    TopDown
 }

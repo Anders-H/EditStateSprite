@@ -1,11 +1,11 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Drawing;
 
-namespace EditStateSprite.Col
+namespace EditStateSprite.Col;
+
+public interface IResources : IDisposable
 {
-    public interface IResources : IDisposable
-    {
-        SolidBrush GetColorBrush(ColorName color);
-        SolidBrush GetShadowBrush();
-    }
+    SolidBrush GetColorBrush(ColorName color);
+    SolidBrush GetShadowBrush();
 }

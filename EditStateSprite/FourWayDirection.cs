@@ -1,10 +1,10 @@
-﻿namespace EditStateSprite
+﻿#nullable enable
+namespace EditStateSprite;
+
+public enum FourWayDirection
 {
-    public enum FourWayDirection
-    {
-        Up,
-        Right,
-        Down,
-        Left
-    }
+    Up,
+    Right,
+    Down,
+    Left
 }

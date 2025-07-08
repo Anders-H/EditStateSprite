@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>EditStateSprite</id>
-    <version>1.17.0</version>
+    <version>1.19.0</version>
     <title>C64 Sprite in edit state</title>
     <authors>Anders Hesselbom</authors>
     <owners></owners>
@@ -10,7 +10,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/Anders-H/EditStateSprite</projectUrl>
     <description>Classes and controls for a C64 (and C128) sprite editor</description>
-    <releaseNotes>Faster preview render, optional transparent background on preview.</releaseNotes>
+    <releaseNotes>Just some more properties, nothing important.</releaseNotes>
     <copyright>Anders Hesselbom</copyright>
   </metadata>
   <files>
