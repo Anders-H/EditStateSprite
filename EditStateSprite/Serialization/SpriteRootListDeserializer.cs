@@ -56,8 +56,10 @@ public class SpriteRootListDeserializer
 
             var versionParts = lines[index].Split('=');
             var version = float.Parse(versionParts[1], NumberStyles.Any, CultureInfo.InvariantCulture);
+            var docVersionInt = (int)Math.Round(SpriteList.DocVersion * 100);
+            var versionInt = (int)Math.Round(version * 100);
 
-            if (version > SpriteList.DocVersion)
+            if (versionInt > docVersionInt)
                 throw new SerializationException("This document is created using a newer version of SPRDEF2.");
 
             index++;

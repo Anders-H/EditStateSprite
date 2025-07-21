@@ -53,24 +53,6 @@ public class SpriteRoot
         ExpandY = false;
     }
 
-    public SpriteRoot(SpriteRoot sprite)
-    {
-        Name = $"{sprite.Name} (copy)";
-        MultiColor = sprite.MultiColor;
-
-        if (MultiColor)
-            ColorMap = new MultiColorSpriteColorMap(this, (MultiColorSpriteColorMap)sprite.ColorMap);
-        else
-            ColorMap = new MonochromeSpriteColorMap(this, (MonochromeSpriteColorMap)sprite.ColorMap);
-
-        SpriteColorPalette = sprite.GetSpriteColorPalette();
-
-        PreviewOffsetX = sprite.PreviewOffsetX + 10;
-        PreviewOffsetY = sprite.PreviewOffsetY + 10;
-        ExpandX = sprite.ExpandX;
-        ExpandY = sprite.ExpandY;
-    }
-
     public static SpriteRoot Parse(SpriteChunkParser chunk) =>
         new SpriteRootParser(chunk).Parse();
     

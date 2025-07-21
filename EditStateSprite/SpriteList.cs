@@ -39,7 +39,6 @@ public class SpriteList : List<SpriteRoot>
     {
         var s = new StringBuilder();
         Serialize(s);
-
         using var sw = new StreamWriter(filename, false, Encoding.UTF8);
         sw.Write(s.ToString());
         sw.Flush();

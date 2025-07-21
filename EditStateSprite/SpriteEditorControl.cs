@@ -9,14 +9,17 @@ namespace EditStateSprite;
 public class SpriteEditorControl : Control
 {
     private int _currentColorIndex;
+    private bool _mouseDown;
     private SpriteRoot _sprite;
     private Editor Editor { get; }
+    public EditorToolEnum Tool { get; private set; }
     public event SpriteChangedDelegate? SpriteChanged;
 
     public SpriteEditorControl()
     {
         _sprite = new SpriteRoot(false);
         Editor = new Editor(_sprite);
+        DoubleBuffered = true;
     }
 
     public void ConnectSprite(SpriteRoot sprite)
@@ -26,6 +29,12 @@ public class SpriteEditorControl : Control
         Editor.ChangeCurrentSprite(_sprite);
         Editor.SetCursorPosition(pos);
         Invalidate();
+    }
+
+    public void SetEditorTool(EditorToolEnum tool)
+    {
+        Tool = tool;
+        Refresh();
     }
 
     public void SetCurrentColorIndex(int colorIndex)
@@ -114,7 +123,7 @@ public class SpriteEditorControl : Control
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        Editor.PaintEditor(e.Graphics, Focused);
+        Editor.PaintEditor(e.Graphics, Tool, Focused);
         base.OnPaint(e);
     }
 
@@ -133,19 +142,42 @@ public class SpriteEditorControl : Control
     protected override void OnMouseDown(MouseEventArgs e)
     {
         Focus();
+        _mouseDown = true;
         base.OnMouseDown(e);
+    }
+
+    protected override void OnMouseUp(MouseEventArgs e)
+    {
+        _mouseDown = false;
+        base.OnMouseUp(e);
     }
 
     protected override void OnMouseClick(MouseEventArgs e)
     {
         base.OnMouseClick(e);
-        Editor.SetPixel(e.X, e.Y, _currentColorIndex);
-        Invalidate();
-        SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+
+        switch (Tool)
+        {
+            case EditorToolEnum.PixelEditor:
+                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+                Invalidate();
+                SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+                break;
+            case EditorToolEnum.FreeHand:
+                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+                Invalidate();
+                SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
     {
+        if (Tool != EditorToolEnum.PixelEditor)
+            return;
+
         switch (e.KeyCode)
         {
             case Keys.Up:
@@ -159,8 +191,32 @@ public class SpriteEditorControl : Control
         base.OnPreviewKeyDown(e);
     }
 
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        if (Tool == EditorToolEnum.FreeHand)
+        {
+            Editor.MoveCursorTo(e.X, e.Y);
+
+            if (_mouseDown)
+                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+
+            Invalidate();
+        }
+
+        base.OnMouseMove(e);
+    }
+
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        Focus();
+        base.OnMouseEnter(e);
+    }
+
     protected override void OnKeyDown(KeyEventArgs e)
     {
+        if (Tool != EditorToolEnum.PixelEditor)
+            return;
+
         switch (e.KeyCode)
         {
             case Keys.Up:
@@ -233,7 +289,6 @@ public class SpriteEditorControl : Control
     /// <param name="lineNumber">BASIC line number (0 - 63999)</param>
     /// <param name="spriteDataStartAddress"></param>
     /// <param name="includeInExportIndex">The index of the sprite in the list of sprites being exported</param>
-    /// <param name="hwSpriteIndex">Hardware sprite (0 - 7)</param>
     /// <param name="x">C64 horizontal screen location</param>
     /// <param name="y">C64 vertical screen location</param>
     /// <returns>Commodore BASIC 2.0 second release source code.</returns>

@@ -22,7 +22,7 @@ namespace TestProgram
         {
             _sprites.Add(new SpriteRoot(false));
             Randomize(_sprites[0], 420, 20);
-            _sprites.Add(new SpriteRoot(_sprites[0]));
+            _sprites.Add(new SpriteRoot(true));
             Randomize(_sprites[1], 420, 150);
 
             spriteEditorControl1.ConnectSprite(_sprites[0]);
@@ -131,7 +131,7 @@ namespace TestProgram
 
         private void button10_Click(object sender, EventArgs e)
         {
-            _sprites.Load(@"C:\Users\hbom\Desktop\sprites.sprdef");
+            _sprites.Load(@"C:\Users\hbom\Desktop\sprite.sprdef");
             spriteEditorControl1.ConnectSprite(_sprites[0]);
             spriteEditorControl2.ConnectSprite(_sprites[1]);
             Invalidate();
@@ -181,6 +181,24 @@ namespace TestProgram
             bytes.AddRange(spriteEditorControl1.GetBytes64WithStartAddress(3584));
             bytes.AddRange(spriteEditorControl2.GetBytes64());
             File.WriteAllBytes(@"D:\Temp\test.prg", bytes.ToArray());
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                spriteEditorControl1.SetEditorTool(EditorToolEnum.PixelEditor);
+                spriteEditorControl2.SetEditorTool(EditorToolEnum.PixelEditor);
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+            {
+                spriteEditorControl1.SetEditorTool(EditorToolEnum.FreeHand);
+                spriteEditorControl2.SetEditorTool(EditorToolEnum.FreeHand);
+            }
         }
     }
 }

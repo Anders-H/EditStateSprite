@@ -13,12 +13,12 @@ public class MonochromeSpriteColorMap : SpriteColorMapBase
     {
     }
 
-    public MonochromeSpriteColorMap(SpriteRoot parent, MonochromeSpriteColorMap originalColorMap) : base(parent)
-    {
-        for (var y = 0; y < 21; y++)
-        for (var x = 0; x < 24; x++)
-            parent.SetPixel(x, y, originalColorMap.GetColorIndex(x, y));
-    }
+    //public MonochromeSpriteColorMap(SpriteRoot parent, MonochromeSpriteColorMap originalColorMap) : base(parent)
+    //{
+    //    for (var y = 0; y < 21; y++)
+    //    for (var x = 0; x < 24; x++)
+    //        parent.SetPixel(x, y, originalColorMap.GetColorIndex(x, y));
+    //}
 
     public override string SerializeSpriteData(int y)
     {

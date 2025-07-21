@@ -47,6 +47,18 @@ public class Editor
         _cursor.Y = 0;
     }
 
+    public void MoveCursorTo(int editorX, int editorY)
+    {
+        var pixelX = editorX / EditorButtonSize.Width;
+        var pixelY = editorY / EditorButtonSize.Height;
+
+        if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
+            return;
+
+        _cursor.X = pixelX;
+        _cursor.Y = pixelY;
+    }
+
     public void SetPixel(int editorX, int editorY, int colorIndex)
     {
         var pixelX = editorX / EditorButtonSize.Width;
@@ -180,17 +192,38 @@ public class Editor
         }
     }
 
-    public void PaintEditor(Graphics g, bool hasFocus)
+    public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus)
     {
-        for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+        switch (tool)
         {
-            for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
-            {
-                if (hasFocus && w == _cursor.X && h == _cursor.Y)
-                    Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
-                else
-                    Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
-            }
+            case EditorToolEnum.PixelEditor:
+                for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+                {
+                    for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+                    {
+                        if (hasFocus && w == _cursor.X && h == _cursor.Y)
+                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
+                        else
+                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
+                    }
+                }
+
+                break;
+            case EditorToolEnum.FreeHand:
+                for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+                {
+                    for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+                    {
+                        if (hasFocus && w == _cursor.X && h == _cursor.Y)
+                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
+                        else
+                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
+                    }
+                }
+
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(tool), tool, null);
         }
     }
 }
