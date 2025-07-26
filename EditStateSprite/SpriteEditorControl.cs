@@ -9,6 +9,7 @@ namespace EditStateSprite;
 public sealed class SpriteEditorControl : Control
 {
     private int _currentColorIndex;
+    private int _secondaryColorIndex;
     private bool _mouseDown;
     private SpriteRoot _sprite;
     private Editor Editor { get; }
@@ -20,6 +21,8 @@ public sealed class SpriteEditorControl : Control
         _sprite = new SpriteRoot(false);
         Editor = new Editor(_sprite);
         DoubleBuffered = true;
+        _currentColorIndex = 1;
+        _secondaryColorIndex = 0;
     }
 
     public void ConnectSprite(SpriteRoot sprite)
@@ -53,6 +56,25 @@ public sealed class SpriteEditorControl : Control
         {
             if (_currentColorIndex > 1)
                 _currentColorIndex = 1;
+        }
+    }
+
+    public void SetSecondaryColorIndex(int colorIndex)
+    {
+        _secondaryColorIndex = colorIndex;
+
+        if (_secondaryColorIndex < 0)
+            _secondaryColorIndex = 0;
+
+        if (_sprite.MultiColor)
+        {
+            if (_secondaryColorIndex > 3)
+                _secondaryColorIndex = 3;
+        }
+        else
+        {
+            if (_secondaryColorIndex > 1)
+                _secondaryColorIndex = 1;
         }
     }
 
@@ -171,7 +193,7 @@ public sealed class SpriteEditorControl : Control
         var color = _currentColorIndex;
 
         if (e.Button == MouseButtons.Right)
-            color = 0;
+            color = _secondaryColorIndex;
 
         if (Editor.CurrentSprite == null)
             return;
@@ -222,7 +244,7 @@ public sealed class SpriteEditorControl : Control
                 var color = _currentColorIndex;
 
                 if (e.Button == MouseButtons.Right)
-                    color = 0;
+                    color = _secondaryColorIndex;
 
                 Editor.SetPixel(e.X, e.Y, color);
             }
