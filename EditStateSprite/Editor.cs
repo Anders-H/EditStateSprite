@@ -12,8 +12,8 @@ public class Editor
     internal static Renderer Renderer { get; }
     internal static IResources Resources { get; }
     public Size EditorButtonSize { get; set; }
-    public ColorButton[,] EditorColorButtonMatrix { get; private set; }
-    public SpriteRoot CurrentSprite { get; private set; }
+    public ColorButton[,]? EditorColorButtonMatrix { get; private set; }
+    public SpriteRoot? CurrentSprite { get; private set; }
 
     static Editor()
     {
@@ -32,6 +32,9 @@ public class Editor
 
     public void SetCursorPosition(Point position)
     {
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
+
         var y = position.Y;
 
         if (y >= EditorColorButtonMatrix.GetLength(0))
@@ -49,6 +52,9 @@ public class Editor
 
     public void MoveCursorTo(int editorX, int editorY)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         var pixelX = editorX / EditorButtonSize.Width;
         var pixelY = editorY / EditorButtonSize.Height;
 
@@ -61,11 +67,17 @@ public class Editor
 
     public void SetPixel(int editorX, int editorY, int colorIndex)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         var pixelX = editorX / EditorButtonSize.Width;
         var pixelY = editorY / EditorButtonSize.Height;
 
-        if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
+        if (pixelX < 0 || pixelX >= CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY >= CurrentSprite.ColorMap.Height)
             return;
+
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
 
         _cursor.X = pixelX;
         _cursor.Y = pixelY;
@@ -75,8 +87,14 @@ public class Editor
 
     public void SetPixelAtCursor(int colorIndex)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         if (_cursor.X < 0 || _cursor.X > CurrentSprite.ColorMap.Width || _cursor.Y < 0 || _cursor.Y > CurrentSprite.ColorMap.Height)
             return;
+
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
 
         EditorColorButtonMatrix[_cursor.X, _cursor.Y].Color = CurrentSprite.SpriteColorPalette[colorIndex];
         CurrentSprite.SetPixel(_cursor.X, _cursor.Y, colorIndex);
@@ -84,6 +102,9 @@ public class Editor
 
     public void MoveCursor(int x, int y)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         _cursor.X += x;
 
         if (_cursor.X < 0)
@@ -101,6 +122,12 @@ public class Editor
 
     public void Clear()
     {
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
+
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
         {
             for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
@@ -113,6 +140,9 @@ public class Editor
 
     internal void Scroll(FourWayDirection direction)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         switch (direction)
         {
             case FourWayDirection.Up:
@@ -135,6 +165,9 @@ public class Editor
 
     internal void Flip(TwoWayDirection direction)
     {
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         switch (direction)
         {
             case TwoWayDirection.LeftRight:
@@ -151,6 +184,12 @@ public class Editor
 
     internal void UpdateEditorButtons()
     {
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
+
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
             for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
                 EditorColorButtonMatrix[w, h].Color = CurrentSprite.SpriteColorPalette[CurrentSprite.ColorMap.Colors[w, h]];
@@ -194,6 +233,12 @@ public class Editor
 
     public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus)
     {
+        if (EditorColorButtonMatrix == null)
+            throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
+
+        if (CurrentSprite == null)
+            throw new InvalidOperationException("CurrentSprite is not set.");
+
         switch (tool)
         {
             case EditorToolEnum.PixelEditor:

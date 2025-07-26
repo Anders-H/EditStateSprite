@@ -1,12 +1,12 @@
 ﻿#nullable enable
-using System;
-using System.Windows.Forms;
 using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Dialogs;
+using System;
+using System.Windows.Forms;
 
 namespace EditStateSprite;
 
-public class SpriteEditorControl : Control
+public sealed class SpriteEditorControl : Control
 {
     private int _currentColorIndex;
     private bool _mouseDown;
@@ -58,6 +58,9 @@ public class SpriteEditorControl : Control
 
     public void Scroll(FourWayDirection direction)
     {
+        if (Editor.CurrentSprite == null)
+            return;
+
         var cursorPosition = Editor.GetCursorPosition();
         Editor.Scroll(direction);
         Editor.SetCursorPosition(cursorPosition);
@@ -67,6 +70,9 @@ public class SpriteEditorControl : Control
 
     public void Flip(TwoWayDirection direction)
     {
+        if (Editor.CurrentSprite == null)
+            return;
+
         var cursorPosition = Editor.GetCursorPosition();
         Editor.Flip(direction);
         Editor.SetCursorPosition(cursorPosition);
@@ -76,6 +82,9 @@ public class SpriteEditorControl : Control
 
     public void Clear()
     {
+        if (Editor.CurrentSprite == null)
+            return;
+
         Editor.Clear();
         Invalidate();
         SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
@@ -84,6 +93,9 @@ public class SpriteEditorControl : Control
     public void SetPalette(params ColorName[] color)
     {
         if (color.Length <= 0)
+            return;
+
+        if (Editor.CurrentSprite == null)
             return;
 
         var count = Math.Min(color.Length, _sprite.SpriteColorPalette.Length);
@@ -156,15 +168,23 @@ public class SpriteEditorControl : Control
     {
         base.OnMouseClick(e);
 
+        var color = _currentColorIndex;
+
+        if (e.Button == MouseButtons.Right)
+            color = 0;
+
+        if (Editor.CurrentSprite == null)
+            return;
+
         switch (Tool)
         {
             case EditorToolEnum.PixelEditor:
-                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+                Editor.SetPixel(e.X, e.Y, color);
                 Invalidate();
                 SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
                 break;
             case EditorToolEnum.FreeHand:
-                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+                Editor.SetPixel(e.X, e.Y, color);
                 Invalidate();
                 SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
                 break;
@@ -198,7 +218,14 @@ public class SpriteEditorControl : Control
             Editor.MoveCursorTo(e.X, e.Y);
 
             if (_mouseDown)
-                Editor.SetPixel(e.X, e.Y, _currentColorIndex);
+            {
+                var color = _currentColorIndex;
+
+                if (e.Button == MouseButtons.Right)
+                    color = 0;
+
+                Editor.SetPixel(e.X, e.Y, color);
+            }
 
             Invalidate();
         }
@@ -215,6 +242,9 @@ public class SpriteEditorControl : Control
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (Tool != EditorToolEnum.PixelEditor)
+            return;
+
+        if (Editor.CurrentSprite == null)
             return;
 
         switch (e.KeyCode)
@@ -262,6 +292,9 @@ public class SpriteEditorControl : Control
 
     public void ToggleColorMode()
     {
+        if (Editor.CurrentSprite == null)
+            return;
+
         Editor.ResetCursorPosition();
 
         if (_sprite.MultiColor)

@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F22D35A3-A669-4FE7-9EF3-5DF0C7C96E75}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
-		Nuget\EditStateSprite.1.22.0.nuspec = Nuget\EditStateSprite.1.22.0.nuspec
+		Nuget\EditStateSprite.1.23.0.nuspec = Nuget\EditStateSprite.1.23.0.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{0C2D537E-B997-4E24-8D9E-63F4F6BA8496}"
