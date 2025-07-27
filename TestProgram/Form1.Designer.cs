@@ -244,7 +244,6 @@
             this.checkBox1.TabIndex = 20;
             this.checkBox1.Text = "Zoom";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // spriteEditorControl1
             // 
@@ -253,7 +252,6 @@
             this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
             this.spriteEditorControl1.TabIndex = 0;
             this.spriteEditorControl1.Text = "spriteEditorControl1";
-            this.spriteEditorControl1.Zoom = false;
             this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
             this.spriteEditorControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl1_MouseClick);
             // 
@@ -264,7 +262,6 @@
             this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
             this.spriteEditorControl2.TabIndex = 21;
             this.spriteEditorControl2.Text = "spriteEditorControl2";
-            this.spriteEditorControl2.Zoom = false;
             // 
             // Form1
             // 

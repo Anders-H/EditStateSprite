@@ -8,7 +8,7 @@ namespace EditStateSprite;
 
 public sealed class SpriteEditorControl : Control
 {
-    private bool _zoom;
+    private int _zoom;
     private int _currentColorIndex;
     private int _secondaryColorIndex;
     private bool _mouseDown;
@@ -29,7 +29,7 @@ public sealed class SpriteEditorControl : Control
         DoubleBuffered = true;
         _currentColorIndex = 1;
         _secondaryColorIndex = 0;
-        Zoom = false;
+        Zoom = 15;
     }
 
     public void ConnectSprite(SpriteRoot sprite)
@@ -41,28 +41,22 @@ public sealed class SpriteEditorControl : Control
         Invalidate();
     }
 
-    public bool Zoom
+    public int Zoom
     {
         get => _zoom;
         set
         {
             _zoom = value;
 
-            if (_zoom)
-            {
-                PixelWidth = 18;
-                PixelHeight = 18;
-                EditorWidth = 431;
-                EditorHeight = 377;
-            }
-            else
-            {
-                PixelWidth = 15;
-                PixelHeight = 15;
-                EditorWidth = 359;
-                EditorHeight = 314;
-            }
+            if (_zoom < 14)
+                _zoom = 14;
+            else if (_zoom > 50)
+                _zoom = 50;
 
+            PixelWidth = _zoom;
+            PixelHeight = _zoom;
+            EditorWidth = PixelWidth * 24 - 1;
+            EditorHeight = PixelHeight * 21 - 1;
             Editor.PixelWidth = PixelWidth;
             Editor.PixelHeight = PixelHeight;
             Editor.RecreateButtons();
@@ -287,15 +281,21 @@ public sealed class SpriteEditorControl : Control
 
     protected override void OnMouseWheel(MouseEventArgs e)
     {
-        if (e.Delta < 20 && Zoom)
+        var oldZoom = Zoom;
+
+        if (e.Delta < 20)
         {
-            Zoom = false;
-            ZoomChanged?.Invoke(this, EventArgs.Empty);
+            Zoom--;
+
+            if (Zoom < oldZoom)
+                ZoomChanged?.Invoke(this, EventArgs.Empty);
         }
-        else if (e.Delta > 20 && !Zoom)
+        else if (e.Delta > 20)
         {
-            Zoom = true;
-            ZoomChanged?.Invoke(this, EventArgs.Empty);
+            Zoom++;
+
+            if (Zoom > oldZoom)
+                ZoomChanged?.Invoke(this, EventArgs.Empty);
         }
 
         base.OnMouseWheel(e);
