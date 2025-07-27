@@ -20,7 +20,7 @@ public sealed class SpriteEditorControl : Control
     private Editor Editor { get; }
     public EditorToolEnum Tool { get; private set; }
     public event SpriteChangedDelegate? SpriteChanged;
-    public event ZoomChangeDelegate? ZoomChanged;
+    public event ZoomChangedDelegate? ZoomChanged;
 
     public SpriteEditorControl()
     {
