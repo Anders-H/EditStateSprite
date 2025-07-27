@@ -9,11 +9,15 @@ namespace EditStateSprite;
 public class Editor
 {
     private Point _cursor;
+    private bool _clearFlag;
     internal static Renderer Renderer { get; }
     internal static IResources Resources { get; }
+    internal int PixelWidth;
+    internal int PixelHeight;
     public Size EditorButtonSize { get; set; }
     public ColorButton[,]? EditorColorButtonMatrix { get; private set; }
     public SpriteRoot? CurrentSprite { get; private set; }
+    public Color BackgroundColor { get; set; }
 
     static Editor()
     {
@@ -21,8 +25,10 @@ public class Editor
         Resources = new Resources();
     }
 
-    public Editor(SpriteRoot currentSprite)
+    public Editor(SpriteRoot currentSprite, int pixelWidth, int pixelHeight)
     {
+        PixelWidth = pixelWidth;
+        PixelHeight = pixelHeight;
         ResetCursorPosition();
         ChangeCurrentSprite(currentSprite);
     }
@@ -205,12 +211,12 @@ public class Editor
         if (CurrentSprite.MultiColor)
         {
             EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-            EditorButtonSize = new Size(30, 15);
+            EditorButtonSize = new Size(PixelWidth * 2, PixelHeight);
         }
         else
         {
             EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-            EditorButtonSize = new Size(15, 15);
+            EditorButtonSize = new Size(PixelWidth, PixelHeight);
         }
 
         var x = 0;
@@ -231,8 +237,40 @@ public class Editor
         }
     }
 
+    internal void RecreateButtons()
+    {
+        if (CurrentSprite == null)
+            return;
+
+        if (EditorColorButtonMatrix == null)
+            return;
+
+        _clearFlag = true;
+        var pixelWidth = PixelWidth - 1;
+
+        if (CurrentSprite.MultiColor)
+            pixelWidth = (PixelWidth * 2) - 1;
+
+        var pixelHeight = PixelHeight - 1;
+        var stepWidth = CurrentSprite.MultiColor ? PixelWidth * 2 : PixelWidth;
+
+        for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
+        {
+            for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+            {
+                EditorColorButtonMatrix[w, h].ResizeButton(w * stepWidth, h * PixelHeight,  pixelWidth, pixelHeight);
+            }
+        }
+    }
+
     public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus)
     {
+        if (_clearFlag)
+        {
+            _clearFlag = false;
+            g.Clear(BackgroundColor);
+        }
+
         if (EditorColorButtonMatrix == null)
             throw new InvalidOperationException("EditorColorButtonMatrix is not initialized.");
 

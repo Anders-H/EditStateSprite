@@ -206,4 +206,10 @@ public partial class Form1 : Form
         spriteEditorControl1.SetCurrentColorIndex(1);
         spriteEditorControl2.SetCurrentColorIndex(1);
     }
+
+    private void checkBox1_CheckedChanged(object sender, EventArgs e)
+    {
+        spriteEditorControl1.Zoom = checkBox1.Checked;
+        spriteEditorControl2.Zoom = checkBox1.Checked;
+    }
 }

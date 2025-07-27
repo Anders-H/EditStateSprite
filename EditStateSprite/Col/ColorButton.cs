@@ -6,7 +6,7 @@ namespace EditStateSprite.Col;
 public class ColorButton
 {
     private readonly Renderer _renderer;
-    public Rectangle Location { get; }
+    public Rectangle Location { get; private set; }
     public ColorName Color { get; set; }
     public bool Selected { get; set; }
 
@@ -27,4 +27,7 @@ public class ColorButton
         else
             _renderer.Render(g, resources, Location, Color, RendererFlags.Outline | RendererFlags.Shadow);
     }
+
+    internal void ResizeButton(int x, int y, int width, int height) =>
+        Location = new Rectangle(x, y, width, height);
 }

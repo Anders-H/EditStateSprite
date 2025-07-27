@@ -8,21 +8,28 @@ namespace EditStateSprite;
 
 public sealed class SpriteEditorControl : Control
 {
+    private bool _zoom;
     private int _currentColorIndex;
     private int _secondaryColorIndex;
     private bool _mouseDown;
+    internal int PixelWidth;
+    internal int PixelHeight;
+    internal int EditorWidth;
+    internal int EditorHeight;
     private SpriteRoot _sprite;
     private Editor Editor { get; }
     public EditorToolEnum Tool { get; private set; }
     public event SpriteChangedDelegate? SpriteChanged;
+    public event ZoomChangeDelegate? ZoomChanged;
 
     public SpriteEditorControl()
     {
         _sprite = new SpriteRoot(false);
-        Editor = new Editor(_sprite);
+        Editor = new Editor(_sprite, 15, 15);
         DoubleBuffered = true;
         _currentColorIndex = 1;
         _secondaryColorIndex = 0;
+        Zoom = false;
     }
 
     public void ConnectSprite(SpriteRoot sprite)
@@ -32,6 +39,42 @@ public sealed class SpriteEditorControl : Control
         Editor.ChangeCurrentSprite(_sprite);
         Editor.SetCursorPosition(pos);
         Invalidate();
+    }
+
+    public bool Zoom
+    {
+        get => _zoom;
+        set
+        {
+            _zoom = value;
+
+            if (_zoom)
+            {
+                PixelWidth = 18;
+                PixelHeight = 18;
+                EditorWidth = 431;
+                EditorHeight = 377;
+            }
+            else
+            {
+                PixelWidth = 15;
+                PixelHeight = 15;
+                EditorWidth = 359;
+                EditorHeight = 314;
+            }
+
+            Editor.PixelWidth = PixelWidth;
+            Editor.PixelHeight = PixelHeight;
+            Editor.RecreateButtons();
+            OnResize(EventArgs.Empty);
+            Refresh();
+        }
+    }
+
+    protected override void OnBackColorChanged(EventArgs e)
+    {
+        Editor.BackgroundColor = BackColor;
+        base.OnBackColorChanged(e);
     }
 
     public void SetEditorTool(EditorToolEnum tool)
@@ -150,8 +193,17 @@ public sealed class SpriteEditorControl : Control
 
     protected override void OnResize(EventArgs e)
     {
-        Width = 359;
-        Height = 314;
+        if (DesignMode)
+        {
+            Width = 359;
+            Height = 314;
+        }
+        else
+        {
+            Width = EditorWidth;
+            Height = EditorHeight;
+        }
+
         base.OnResize(e);
     }
 
@@ -231,6 +283,22 @@ public sealed class SpriteEditorControl : Control
         }
 
         base.OnPreviewKeyDown(e);
+    }
+
+    protected override void OnMouseWheel(MouseEventArgs e)
+    {
+        if (e.Delta < 20 && Zoom)
+        {
+            Zoom = false;
+            ZoomChanged?.Invoke(this, EventArgs.Empty);
+        }
+        else if (e.Delta > 20 && !Zoom)
+        {
+            Zoom = true;
+            ZoomChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        base.OnMouseWheel(e);
     }
 
     protected override void OnMouseMove(MouseEventArgs e)
