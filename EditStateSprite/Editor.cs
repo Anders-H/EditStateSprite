@@ -1,8 +1,9 @@
 ﻿#nullable enable
-using System;
-using System.Drawing;
 using EditStateSprite.Col;
 using EditStateSprite.SpriteModifiers;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace EditStateSprite;
 
@@ -14,7 +15,6 @@ public class Editor
     internal static IResources Resources { get; }
     internal int PixelWidth;
     internal int PixelHeight;
-    public Size EditorButtonSize { get; set; }
     public ColorButton[,]? EditorColorButtonMatrix { get; private set; }
     public SpriteRoot? CurrentSprite { get; private set; }
     public Color BackgroundColor { get; set; }
@@ -56,13 +56,14 @@ public class Editor
         _cursor.Y = 0;
     }
 
-    public void MoveCursorTo(int editorX, int editorY)
+    public void MoveCursorTo(int editorX, int editorY, bool multiColor)
     {
         if (CurrentSprite == null)
             throw new InvalidOperationException("CurrentSprite is not set.");
 
-        var pixelX = editorX / EditorButtonSize.Width;
-        var pixelY = editorY / EditorButtonSize.Height;
+        var pw = multiColor ? PixelWidth * 2 : PixelWidth;
+        var pixelX = editorX / pw;
+        var pixelY = editorY / PixelHeight;
 
         if (pixelX < 0 || pixelX > CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY > CurrentSprite.ColorMap.Height)
             return;
@@ -71,13 +72,14 @@ public class Editor
         _cursor.Y = pixelY;
     }
 
-    public void SetPixel(int editorX, int editorY, int colorIndex)
+    public void SetPixel(int editorX, int editorY, bool multiColor, int colorIndex)
     {
         if (CurrentSprite == null)
             throw new InvalidOperationException("CurrentSprite is not set.");
 
-        var pixelX = editorX / EditorButtonSize.Width;
-        var pixelY = editorY / EditorButtonSize.Height;
+        var pw = multiColor ? PixelWidth * 2 : PixelWidth;
+        var pixelX = editorX / pw;
+        var pixelY = editorY / PixelHeight;
 
         if (pixelX < 0 || pixelX >= CurrentSprite.ColorMap.Width || pixelY < 0 || pixelY >= CurrentSprite.ColorMap.Height)
             return;
@@ -205,35 +207,27 @@ public class Editor
     {
         _cursor.X = 0;
         _cursor.Y = 0;
-
         CurrentSprite = currentSprite;
-
-        if (CurrentSprite.MultiColor)
-        {
-            EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-            EditorButtonSize = new Size(PixelWidth * 2, PixelHeight);
-        }
-        else
-        {
-            EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
-            EditorButtonSize = new Size(PixelWidth, PixelHeight);
-        }
-
+        EditorColorButtonMatrix = new ColorButton[CurrentSprite.ColorMap.Width, CurrentSprite.ColorMap.Height];
         var x = 0;
         var y = 0;
-        var pw = EditorButtonSize.Width - 1;
-        var ph = EditorButtonSize.Height - 1;
+        var pw = PixelWidth - 1;
+        var ph = PixelHeight - 1;
+        var stepWidth = CurrentSprite.MultiColor ? PixelWidth * 2 : PixelWidth;
+
+        if (CurrentSprite.MultiColor)
+            pw = (PixelWidth * 2) - 1;
 
         for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
         {
             for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
             {
                 EditorColorButtonMatrix[w, h] = new ColorButton(Renderer, new Rectangle(x, y, pw, ph), CurrentSprite.ColorMap.GetColorNameFromPosition(w, h));
-                x += EditorButtonSize.Width;
+                x += stepWidth;
             }
 
             x = 0;
-            y += EditorButtonSize.Height;
+            y += PixelHeight;
         }
     }
 

@@ -48,8 +48,8 @@ public sealed class SpriteEditorControl : Control
         {
             _zoom = value;
 
-            if (_zoom < 14)
-                _zoom = 14;
+            if (_zoom < 8)
+                _zoom = 8;
             else if (_zoom > 50)
                 _zoom = 50;
 
@@ -247,12 +247,12 @@ public sealed class SpriteEditorControl : Control
         switch (Tool)
         {
             case EditorToolEnum.PixelEditor:
-                Editor.SetPixel(e.X, e.Y, color);
+                Editor.SetPixel(e.X, e.Y, _sprite.MultiColor, color);
                 Invalidate();
                 SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
                 break;
             case EditorToolEnum.FreeHand:
-                Editor.SetPixel(e.X, e.Y, color);
+                Editor.SetPixel(e.X, e.Y, _sprite.MultiColor, color);
                 Invalidate();
                 SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
                 break;
@@ -305,7 +305,7 @@ public sealed class SpriteEditorControl : Control
     {
         if (Tool == EditorToolEnum.FreeHand)
         {
-            Editor.MoveCursorTo(e.X, e.Y);
+            Editor.MoveCursorTo(e.X, e.Y, _sprite.MultiColor);
 
             if (_mouseDown)
             {
@@ -314,7 +314,7 @@ public sealed class SpriteEditorControl : Control
                 if (e.Button == MouseButtons.Right)
                     color = _secondaryColorIndex;
 
-                Editor.SetPixel(e.X, e.Y, color);
+                Editor.SetPixel(e.X, e.Y, _sprite.MultiColor, color);
             }
 
             Invalidate();
