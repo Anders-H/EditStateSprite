@@ -49,6 +49,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
+            this.button17 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -252,6 +253,7 @@
             this.spriteEditorControl1.Size = new System.Drawing.Size(359, 314);
             this.spriteEditorControl1.TabIndex = 0;
             this.spriteEditorControl1.Text = "spriteEditorControl1";
+            this.spriteEditorControl1.Zoom = 15;
             this.spriteEditorControl1.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl1_SpriteChanged);
             this.spriteEditorControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl1_MouseClick);
             // 
@@ -262,6 +264,17 @@
             this.spriteEditorControl2.Size = new System.Drawing.Size(359, 314);
             this.spriteEditorControl2.TabIndex = 21;
             this.spriteEditorControl2.Text = "spriteEditorControl2";
+            this.spriteEditorControl2.Zoom = 15;
+            // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(164, 204);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(75, 23);
+            this.button17.TabIndex = 22;
+            this.button17.Text = "Thumbnail";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
             // Form1
             // 
@@ -269,6 +282,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(1012, 739);
+            this.Controls.Add(this.button17);
             this.Controls.Add(this.spriteEditorControl2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.radioButton2);
@@ -324,6 +338,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.CheckBox checkBox1;
         private EditStateSprite.SpriteEditorControl spriteEditorControl2;
+        private System.Windows.Forms.Button button17;
     }
 }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace EditStateSprite;
@@ -50,6 +51,52 @@ public abstract class SpriteColorMapBase
         SpriteRoot.C64Palette.GetColor(GetColorNameFromPosition(x, y, out isBackground));
 
     public abstract string SerializeSpriteData(int y);
+
+    public Bitmap GetBitmapNoAttributes()
+    {
+        var b = new Bitmap(24, 21);
+
+        if (Width > 20)
+        {
+            for (var y = 0; y < 21; y++)
+            {
+                for (var x = 0; x < 24; x++)
+                {
+                    var c = GetColorFromPosition(x, y, out _);
+                    b.SetPixel(x, y, c);
+                }
+            }
+        }
+        else
+        {
+            var xPos = 0;
+
+            for (var y = 0; y < 21; y++)
+            {
+                for (var x = 0; x < 12; x++)
+                {
+                    var c = GetColorFromPosition(x, y, out _);
+                    b.SetPixel(xPos, y, c);
+                    b.SetPixel(xPos + 1, y, c);
+                    xPos += 2;
+                }
+
+                xPos = 0;
+            }
+        }
+        return b;
+    }
+
+    public Bitmap GetBitmap16x16NoAttributes()
+    {
+        var b = new Bitmap(16, 16);
+        using var spriteBitmap = GetBitmapNoAttributes();
+        using var g = Graphics.FromImage(b);
+        g.SmoothingMode = SmoothingMode.HighQuality;
+        g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+        g.DrawImage(spriteBitmap, 0, 0, 16, 16);
+        return b;
+    }
 
     public void PaintPreview(Graphics g, int locationX, int locationY)
     {

@@ -206,4 +206,10 @@ public partial class Form1 : Form
         spriteEditorControl1.SetCurrentColorIndex(1);
         spriteEditorControl2.SetCurrentColorIndex(1);
     }
+
+    private void button17_Click(object sender, EventArgs e)
+    {
+        using var b1 = _sprites[0].GetBitmap16x16NoAttributes();
+        using var b2 = _sprites[1].GetBitmap16x16NoAttributes();
+    }
 }

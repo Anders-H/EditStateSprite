@@ -1,11 +1,12 @@
 ﻿#nullable enable
-using System;
-using System.Linq;
-using System.Text;
 using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Col;
 using EditStateSprite.Serialization;
 using EditStateSprite.SpriteModifiers;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 
 namespace EditStateSprite;
 
@@ -201,6 +202,9 @@ public class SpriteRoot
 
     public byte[] GetBytes64WithStartAddress(ushort startAddress) =>
         ColorMap.GetBytes64WithStartAddress(startAddress);
+
+    public Bitmap GetBitmap16x16NoAttributes() =>
+        ColorMap.GetBitmap16x16NoAttributes();
 
     /// <summary>
     /// Generates Commodore 64 BASIC code for displaying a sprite.
