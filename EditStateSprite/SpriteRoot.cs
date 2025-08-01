@@ -13,8 +13,8 @@ namespace EditStateSprite;
 public class SpriteRoot
 {
     private static Random Rnd { get; }
-    public string Name { get; set; }
     public static Palette C64Palette { get; }
+    public string Name { get; set; }
     public bool MultiColor { get; private set; }
     public SpriteColorMapBase ColorMap { get; private set; }
     public ColorName[] SpriteColorPalette { get; internal set; }
@@ -52,6 +52,28 @@ public class SpriteRoot
         PreviewOffsetY = 0;
         ExpandX = false;
         ExpandY = false;
+    }
+
+    public SpriteRoot Duplicate()
+    {
+        var newSprite = new SpriteRoot(MultiColor)
+        {
+            Name = $"{Name} COPY",
+            PreviewOffsetX = PreviewOffsetX + 10,
+            PreviewOffsetY = PreviewOffsetY + 10,
+            ExpandX = ExpandX,
+            ExpandY = ExpandY,
+            PreviewZoom = PreviewZoom,
+            X = X + 10,
+            Y = Y + 10
+        };
+
+        newSprite.ColorMap.SetFrom(ColorMap);
+
+        for (var i = 0; i < SpriteColorPalette.Length; i++)
+            newSprite.SpriteColorPalette[i] = SpriteColorPalette[i];
+
+        return newSprite;
     }
 
     public static SpriteRoot Parse(SpriteChunkParser chunk) =>

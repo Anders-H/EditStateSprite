@@ -28,6 +28,17 @@ public abstract class SpriteColorMapBase
         PaintBackground = paintBackground;
     }
 
+    public void SetFrom(SpriteColorMapBase colorMap)
+    {
+        for (var h = 0; h < Height; h++)
+        {
+            for (var w = 0; w < Width; w++)
+            {
+                Colors[w, h] = colorMap.Colors[w, h];
+            }
+        }
+    }
+
     public int GetColorIndex(int x, int y) =>
         Colors[x, y];
 
