@@ -9,5 +9,6 @@ public enum RendererFlags
     None = 0,
     Outline = 1,
     Selected = 2,
-    Shadow = 4
+    Shadow = 4,
+    Preview = 8
 }

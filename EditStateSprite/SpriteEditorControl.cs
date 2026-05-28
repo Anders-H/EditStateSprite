@@ -2,12 +2,16 @@
 using EditStateSprite.CodeGeneration.Basic20;
 using EditStateSprite.Dialogs;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace EditStateSprite;
 
 public sealed class SpriteEditorControl : Control
 {
+    private Point _lineStart;
+    private bool _lineDrawing;
+    private Point _linePreviewEnd;
     private int _zoom;
     private int _currentColorIndex;
     private int _secondaryColorIndex;
@@ -204,6 +208,12 @@ public sealed class SpriteEditorControl : Control
     protected override void OnPaint(PaintEventArgs e)
     {
         Editor.PaintEditor(e.Graphics, Tool, Focused);
+
+        var preview = (_lineDrawing && Tool == EditorToolEnum.LineTool)
+            ? Editor.GetLinePoints(_lineStart, _linePreviewEnd)
+            : null;
+
+        Editor.PaintEditor(e.Graphics, Tool, Focused, preview);
         base.OnPaint(e);
     }
 
@@ -223,12 +233,35 @@ public sealed class SpriteEditorControl : Control
     {
         Focus();
         _mouseDown = true;
+
+        switch (Tool)
+        {
+            case EditorToolEnum.LineTool:
+                _lineDrawing = true;
+                _lineStart = PixelFromMouse(e.X, e.Y);
+                _linePreviewEnd = _lineStart;
+                break;
+        }
+
         base.OnMouseDown(e);
     }
 
     protected override void OnMouseUp(MouseEventArgs e)
     {
         _mouseDown = false;
+
+        if (Editor.CurrentSprite == null)
+            return;
+
+        if (Tool == EditorToolEnum.LineTool && _lineDrawing)
+        {
+            _lineDrawing = false;
+            var end = PixelFromMouse(e.X, e.Y);
+            Editor.DrawLine(_lineStart, end, _currentColorIndex);
+            Invalidate();
+            SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+        }
+
         base.OnMouseUp(e);
     }
 
@@ -255,6 +288,8 @@ public sealed class SpriteEditorControl : Control
                 Editor.SetPixel(e.X, e.Y, _sprite.MultiColor, color);
                 Invalidate();
                 SpriteChanged?.Invoke(this, new SpriteChangedEventArgs(Editor.CurrentSprite));
+                break;
+            case EditorToolEnum.LineTool:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -318,6 +353,14 @@ public sealed class SpriteEditorControl : Control
             }
 
             Invalidate();
+        }
+        else if (Tool == EditorToolEnum.LineTool)
+        {
+            if (_lineDrawing)
+            {
+                _linePreviewEnd = PixelFromMouse(e.X, e.Y);
+                Invalidate(); // Rita om med preview
+            }
         }
 
         base.OnMouseMove(e);
@@ -417,4 +460,10 @@ public sealed class SpriteEditorControl : Control
     /// <returns>Commodore BASIC 2.0 second release source code.</returns>
     public string GetBasicCode(int lineNumber, int spriteDataStartAddress, int includeInExportIndex, int x, int y) =>
         new CommodoreBasic20Generator(_sprite).GetBasicCode(lineNumber, spriteDataStartAddress, includeInExportIndex, x, y);
+
+    private Point PixelFromMouse(int mouseX, int mouseY)
+    {
+        var pw = _sprite.MultiColor ? PixelWidth * 2 : PixelWidth;
+        return new Point(mouseX / pw, mouseY / PixelHeight);
+    }
 }

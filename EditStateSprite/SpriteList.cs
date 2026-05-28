@@ -14,6 +14,10 @@ public class SpriteList : List<SpriteRoot>
 {
     public const double DocVersion = 1.1;
 
+    public SpriteList()
+    {
+    }
+
     public void PaintPreview(Graphics g)
     {
         foreach (var s in this)

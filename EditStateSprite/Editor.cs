@@ -2,6 +2,7 @@
 using EditStateSprite.Col;
 using EditStateSprite.SpriteModifiers;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -146,6 +147,37 @@ public class Editor
         }
     }
 
+    public void DrawLine(Point from, Point to, int colorIndex)
+    {
+        if (CurrentSprite == null || EditorColorButtonMatrix == null)
+            return;
+
+        foreach (var point in GetLinePoints(from, to))
+        {
+            if (point.X < 0 || point.X >= CurrentSprite.ColorMap.Width) continue;
+            if (point.Y < 0 || point.Y >= CurrentSprite.ColorMap.Height) continue;
+            EditorColorButtonMatrix[point.X, point.Y].Color = CurrentSprite.SpriteColorPalette[colorIndex];
+            CurrentSprite.SetPixel(point.X, point.Y, colorIndex);
+        }
+    }
+
+    public static IEnumerable<Point> GetLinePoints(Point from, Point to)
+    {
+        // Bresenham
+        int x0 = from.X, y0 = from.Y, x1 = to.X, y1 = to.Y;
+        int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+        int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+        int err = dx + dy;
+        while (true)
+        {
+            yield return new Point(x0, y0);
+            if (x0 == x1 && y0 == y1) break;
+            int e2 = 2 * err;
+            if (e2 >= dy) { err += dy; x0 += sx; }
+            if (e2 <= dx) { err += dx; y0 += sy; }
+        }
+    }
+
     internal void Scroll(FourWayDirection direction)
     {
         if (CurrentSprite == null)
@@ -257,7 +289,7 @@ public class Editor
         }
     }
 
-    public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus)
+    public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus, IEnumerable<Point>? previewPixels = null)
     {
         if (_clearFlag)
         {
@@ -271,34 +303,35 @@ public class Editor
         if (CurrentSprite == null)
             throw new InvalidOperationException("CurrentSprite is not set.");
 
+        // Bygg en HashSet för O(1)-uppslagning
+        var previewSet = previewPixels != null
+            ? new HashSet<Point>(previewPixels)
+            : null;
+
         switch (tool)
         {
             case EditorToolEnum.PixelEditor:
-                for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
-                {
-                    for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
-                    {
-                        if (hasFocus && w == _cursor.X && h == _cursor.Y)
-                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
-                        else
-                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
-                    }
-                }
-
-                break;
             case EditorToolEnum.FreeHand:
+            case EditorToolEnum.LineTool:
                 for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
                 {
                     for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
                     {
-                        if (hasFocus && w == _cursor.X && h == _cursor.Y)
-                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.Selected);
+                        RendererFlags flags;
+
+                        if (previewSet != null && previewSet.Contains(new Point(w, h)))
+                            flags = RendererFlags.Preview;
+                        else if (hasFocus && w == _cursor.X && h == _cursor.Y)
+                            flags = RendererFlags.Selected;
                         else
-                            Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, RendererFlags.None);
+                            flags = RendererFlags.None;
+
+                        Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location,
+                            EditorColorButtonMatrix[w, h].Color, flags);
                     }
                 }
-
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(tool), tool, null);
         }

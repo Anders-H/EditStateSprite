@@ -32,5 +32,10 @@ public class Renderer
             g.DrawRectangle(Pens.Blue, location.X + 3, location.Y + 3, location.Width - 7, location.Height - 7);
             g.DrawRectangle(Pens.White, location.X + 4, location.Y + 4, location.Width - 9, location.Height - 9);
         }
+
+        if (flags.HasFlag(RendererFlags.Preview))
+        {
+            g.DrawRectangle(Pens.White, location.X + 1, location.Y + 1, location.Width - 3, location.Height - 3);
+        }
     }
 }

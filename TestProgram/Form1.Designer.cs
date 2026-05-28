@@ -50,6 +50,7 @@
             this.spriteEditorControl1 = new EditStateSprite.SpriteEditorControl();
             this.spriteEditorControl2 = new EditStateSprite.SpriteEditorControl();
             this.button17 = new System.Windows.Forms.Button();
+            this.radioLine = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // button1
@@ -216,7 +217,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(508, 48);
+            this.radioButton1.Location = new System.Drawing.Point(512, 56);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(76, 17);
             this.radioButton1.TabIndex = 18;
@@ -228,7 +229,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(508, 68);
+            this.radioButton2.Location = new System.Drawing.Point(512, 72);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(70, 17);
             this.radioButton2.TabIndex = 19;
@@ -276,12 +277,24 @@
             this.button17.UseVisualStyleBackColor = true;
             this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
+            // radioLine
+            // 
+            this.radioLine.AutoSize = true;
+            this.radioLine.Location = new System.Drawing.Point(512, 88);
+            this.radioLine.Name = "radioLine";
+            this.radioLine.Size = new System.Drawing.Size(65, 17);
+            this.radioLine.TabIndex = 23;
+            this.radioLine.Text = "Line tool";
+            this.radioLine.UseVisualStyleBackColor = true;
+            this.radioLine.CheckedChanged += new System.EventHandler(this.radioLine_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(1012, 739);
+            this.Controls.Add(this.radioLine);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.spriteEditorControl2);
             this.Controls.Add(this.checkBox1);
@@ -339,6 +352,7 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private EditStateSprite.SpriteEditorControl spriteEditorControl2;
         private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.RadioButton radioLine;
     }
 }
 

@@ -3,5 +3,6 @@
 public enum EditorToolEnum
 {
     PixelEditor,
-    FreeHand
+    FreeHand,
+    LineTool
 }

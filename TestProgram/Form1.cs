@@ -201,6 +201,15 @@ public partial class Form1 : Form
         }
     }
 
+    private void radioLine_CheckedChanged(object sender, EventArgs e)
+    {
+        if (radioLine.Checked)
+        {
+            spriteEditorControl1.SetEditorTool(EditorToolEnum.LineTool);
+            spriteEditorControl2.SetEditorTool(EditorToolEnum.LineTool);
+        }
+    }
+
     private void Form1_Shown(object sender, EventArgs e)
     {
         spriteEditorControl1.SetCurrentColorIndex(1);
