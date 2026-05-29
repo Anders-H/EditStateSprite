@@ -207,13 +207,11 @@ public sealed class SpriteEditorControl : Control
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        Editor.PaintEditor(e.Graphics, Tool, Focused);
-
         var preview = (_lineDrawing && Tool == EditorToolEnum.LineTool)
             ? Editor.GetLinePoints(_lineStart, _linePreviewEnd)
             : null;
 
-        Editor.PaintEditor(e.Graphics, Tool, Focused, preview);
+        Editor.PaintEditor(e.Graphics, Tool, Focused, preview, _currentColorIndex);
         base.OnPaint(e);
     }
 

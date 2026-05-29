@@ -6,7 +6,7 @@ namespace EditStateSprite.Col;
 
 public class Renderer
 {
-    public void Render(Graphics g, IResources resources, Rectangle location, ColorName color, RendererFlags flags)
+    public void Render(Graphics g, IResources resources, Rectangle location, ColorName color, RendererFlags flags, Pen previewPen)
     {
         g.SmoothingMode = SmoothingMode.None;
 
@@ -36,6 +36,9 @@ public class Renderer
         if (flags.HasFlag(RendererFlags.Preview))
         {
             g.DrawRectangle(Pens.White, location.X + 1, location.Y + 1, location.Width - 3, location.Height - 3);
+            g.DrawRectangle(previewPen, location.X + 2, location.Y + 2, location.Width - 5, location.Height - 5);
+            g.DrawRectangle(previewPen, location.X + 3, location.Y + 3, location.Width - 7, location.Height - 7);
+            g.DrawRectangle(Pens.White, location.X + 4, location.Y + 4, location.Width - 9, location.Height - 9);
         }
     }
 }

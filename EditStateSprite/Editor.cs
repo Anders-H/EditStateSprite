@@ -4,6 +4,7 @@ using EditStateSprite.SpriteModifiers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace EditStateSprite;
@@ -284,12 +285,12 @@ public class Editor
         {
             for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
             {
-                EditorColorButtonMatrix[w, h].ResizeButton(w * stepWidth, h * PixelHeight,  pixelWidth, pixelHeight);
+                EditorColorButtonMatrix[w, h].ResizeButton(w * stepWidth, h * PixelHeight, pixelWidth, pixelHeight);
             }
         }
     }
 
-    public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus, IEnumerable<Point>? previewPixels = null)
+    public void PaintEditor(Graphics g, EditorToolEnum tool, bool hasFocus, IEnumerable<Point>? previewPixels, int penColorIndex)
     {
         if (_clearFlag)
         {
@@ -308,32 +309,23 @@ public class Editor
             ? new HashSet<Point>(previewPixels)
             : null;
 
-        switch (tool)
+        var previewPenColor = Resources.GetColorPen(CurrentSprite.SpriteColorPalette[penColorIndex]);
+
+        for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
         {
-            case EditorToolEnum.PixelEditor:
-            case EditorToolEnum.FreeHand:
-            case EditorToolEnum.LineTool:
-                for (var h = 0; h < CurrentSprite.ColorMap.Height; h++)
-                {
-                    for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
-                    {
-                        RendererFlags flags;
+            for (var w = 0; w < CurrentSprite.ColorMap.Width; w++)
+            {
+                RendererFlags flags;
 
-                        if (previewSet != null && previewSet.Contains(new Point(w, h)))
-                            flags = RendererFlags.Preview;
-                        else if (hasFocus && w == _cursor.X && h == _cursor.Y)
-                            flags = RendererFlags.Selected;
-                        else
-                            flags = RendererFlags.None;
+                if (previewSet != null && previewSet.Contains(new Point(w, h)))
+                    flags = RendererFlags.Preview;
+                else if (hasFocus && w == _cursor.X && h == _cursor.Y)
+                    flags = RendererFlags.Selected;
+                else
+                    flags = RendererFlags.None;
 
-                        Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location,
-                            EditorColorButtonMatrix[w, h].Color, flags);
-                    }
-                }
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(tool), tool, null);
+                Renderer.Render(g, Resources, EditorColorButtonMatrix[w, h].Location, EditorColorButtonMatrix[w, h].Color, flags, previewPenColor);
+            }
         }
     }
 }

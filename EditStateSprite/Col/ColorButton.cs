@@ -23,9 +23,9 @@ public class ColorButton
     public void Render(Graphics g, IResources resources)
     {
         if (Selected)
-            _renderer.Render(g, resources, Location, Color, RendererFlags.Outline | RendererFlags.Shadow | RendererFlags.Selected);
+            _renderer.Render(g, resources, Location, Color, RendererFlags.Outline | RendererFlags.Shadow | RendererFlags.Selected, Pens.Black);
         else
-            _renderer.Render(g, resources, Location, Color, RendererFlags.Outline | RendererFlags.Shadow);
+            _renderer.Render(g, resources, Location, Color, RendererFlags.Outline | RendererFlags.Shadow, Pens.Black);
     }
 
     internal void ResizeButton(int x, int y, int width, int height) =>

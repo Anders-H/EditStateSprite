@@ -266,6 +266,8 @@
             this.spriteEditorControl2.TabIndex = 21;
             this.spriteEditorControl2.Text = "spriteEditorControl2";
             this.spriteEditorControl2.Zoom = 15;
+            this.spriteEditorControl2.SpriteChanged += new EditStateSprite.SpriteChangedDelegate(this.spriteEditorControl2_SpriteChanged);
+            this.spriteEditorControl2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.spriteEditorControl2_MouseClick);
             // 
             // button17
             // 
